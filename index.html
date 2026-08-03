@@ -1,615 +1,438 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0f172a" id="theme-meta">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Admission">
-    <title>ভর্তি পরীক্ষা কাউন্টডাউন</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-body: #090f1a;
-            --bg-app: #121b2b;
-            --bg-header: #172439;
-            --bg-card: #1a273c;
-            --bg-card-hover: #21324c;
-            --border-color: #293d5a;
-            --border-active: #3b82f6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.15);
-            --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.15);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --pattern-color: rgba(255, 255, 255, 0.03);
-        }
-        [data-theme="light"] {
-            --bg-body: #e2e8f0;
-            --bg-app: #ffffff;
-            --bg-header: #f8fafc;
-            --bg-card: #ffffff;
-            --bg-card-hover: #f1f5f9;
-            --border-color: #cbd5e1;
-            --border-active: #2563eb;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent: #2563eb;
-            --accent-glow: rgba(37, 99, 235, 0.1);
-            --success: #059669;
-            --success-glow: rgba(5, 150, 105, 0.1);
-            --glass-bg: rgba(0, 0, 0, 0.02);
-            --glass-border: rgba(0, 0, 0, 0.06);
-            --pattern-color: rgba(0, 0, 0, 0.03);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a" id="theme-meta">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ভর্তি কাউন্টডাউন">
+<title>বিশ্ববিদ্যালয় ভর্তি পরীক্ষা কাউন্টডাউন</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-primary:#0f172a;
+  --bg-secondary:#1e293b;
+  --bg-card:#1e293b;
+  --bg-card-hover:#263348;
+  --border-color:#334155;
+  --text-primary:#f1f5f9;
+  --text-secondary:#94a3b8;
+  --text-muted:#64748b;
+  --accent-blue:#3b82f6;
+  --accent-blue-light:#60a5fa;
+  --accent-glow:rgba(59,130,246,0.15);
+  --header-from:#1e3a5f;
+  --header-to:#0f172a;
+  --scrollbar-thumb:#334155;
+}
+[data-theme="light"]{
+  --bg-primary:#f0f4ff;
+  --bg-secondary:#ffffff;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f8faff;
+  --border-color:#dde5f4;
+  --text-primary:#0f172a;
+  --text-secondary:#475569;
+  --text-muted:#94a3b8;
+  --accent-blue:#2563eb;
+  --accent-blue-light:#3b82f6;
+  --accent-glow:rgba(37,99,235,0.1);
+  --header-from:#1d4ed8;
+  --header-to:#1e3a6e;
+  --scrollbar-thumb:#bfdbfe;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Noto Sans Bengali','Inter',sans-serif;
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100dvh;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  transition:background .4s ease,color .4s ease;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -20%, var(--accent-glow), transparent);
+  pointer-events:none;z-index:0;transition:background .4s ease;
+}
+.app-wrapper{
+  width:100%;max-width:460px;height:100dvh;max-height:860px;
+  background:var(--bg-secondary);border-radius:28px;overflow:hidden;
+  border:1px solid var(--border-color);
+  box-shadow:0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset;
+  display:flex;flex-direction:column;position:relative;z-index:1;
+  transition:background .4s ease,border-color .4s ease,box-shadow .4s ease;
+  animation:wrapperIn .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes wrapperIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(min-width:900px){
+  .app-wrapper{max-width:900px;flex-direction:row}
+  .header-section{width:42%;flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-start}
+  .content-col{width:58%;display:flex;flex-direction:column;min-height:0}
+  .tabs-section,.list-section{flex:1;min-height:0}
+}
+@media(max-width:480px){
+  .app-wrapper{border-radius:0;max-height:none;height:100dvh;border-left:none;border-right:none}
+  body{padding:0}
+}
+.header-section{
+  background:linear-gradient(160deg,var(--header-from),var(--header-to));
+  padding:14px 16px 20px;position:relative;flex-shrink:0;
+  transition:background .4s ease;overflow:hidden;
+}
+.header-section::after{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;position:relative;z-index:2}
+.dev-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,0.25);backdrop-filter:blur(12px);
+  padding:5px 10px;border-radius:20px;font-size:11px;color:#bfdbfe;
+  border:1px solid rgba(96,165,250,0.25);text-decoration:none;
+  transition:background .2s,transform .2s;
+}
+.dev-badge:hover{background:rgba(0,0,0,0.4);transform:scale(1.03)}
+.dev-badge:active{transform:scale(.97)}
+.dark-toggle{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(0,0,0,0.25);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.12);border-radius:20px;
+  padding:5px 10px 5px 8px;cursor:pointer;
+  transition:background .2s,transform .15s;flex-shrink:0;
+}
+.dark-toggle:hover{background:rgba(0,0,0,0.38);transform:scale(1.04)}
+.dark-toggle:active{transform:scale(.96)}
+.toggle-icon-wrap{width:18px;height:18px;position:relative;flex-shrink:0}
+.toggle-icon-wrap svg{position:absolute;inset:0;transition:opacity .3s ease,transform .35s ease}
+[data-theme="dark"] .icon-moon{opacity:1;transform:rotate(0deg) scale(1)}
+[data-theme="dark"] .icon-sun{opacity:0;transform:rotate(90deg) scale(.5)}
+[data-theme="light"] .icon-moon{opacity:0;transform:rotate(-90deg) scale(.5)}
+[data-theme="light"] .icon-sun{opacity:1;transform:rotate(0deg) scale(1)}
+.toggle-label{font-size:11px;font-weight:600;color:#bfdbfe;white-space:nowrap;pointer-events:none}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Noto Sans Bengali', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100dvh;
-            transition: background-color 0.4s ease;
-            overflow: hidden;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
+.uni-select-wrap{position:relative;z-index:2;margin-bottom:16px}
+.styled-select{
+  width:100%;appearance:none;
+  background:rgba(0,0,0,0.22);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.14);
+  color:#fff;font-family:'Noto Sans Bengali',sans-serif;
+  font-size:15px;font-weight:700;border-radius:14px;
+  padding:13px 38px 13px 14px;outline:none;cursor:pointer;
+  transition:border-color .2s,background .2s;
+}
+.styled-select:focus{border-color:var(--accent-blue-light)}
+.select-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#93c5fd;pointer-events:none}
 
-        .app-container {
-            width: 100%;
-            max-width: 440px;
-            height: 100dvh;
-            max-height: 860px;
-            background-color: var(--bg-app);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        @media (min-width: 441px) {
-            .app-container {
-                border-radius: 30px;
-                height: 95dvh;
-                border: 1px solid var(--border-color);
-            }
-        }
+.exam-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:4px;position:relative;z-index:2;animation:slideUp .4s ease both}
+.exam-date-line{font-size:12px;color:#93c5fd;margin-bottom:12px;display:flex;align-items:center;gap:6px;position:relative;z-index:2;font-weight:500;animation:slideUp .4s ease .05s both}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.approx-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:20px;padding:6px 13px;margin-top:12px;
+  font-size:12.5px;font-weight:600;color:#dbeafe;
+  position:relative;z-index:2;animation:slideUp .4s ease .1s both;
+}
+.approx-pill b{color:#fff;font-weight:800}
+.countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative;z-index:2;margin-bottom:0}
+.countdown-box{background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:10px 4px 8px;text-align:center;animation:boxPop .4s cubic-bezier(.34,1.56,.64,1) both}
+.countdown-box:nth-child(1){animation-delay:.05s}
+.countdown-box:nth-child(2){animation-delay:.1s}
+.countdown-box:nth-child(3){animation-delay:.15s}
+.countdown-box:nth-child(4){animation-delay:.2s}
+@keyframes boxPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.countdown-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fff;line-height:1;display:block}
+.countdown-label{font-size:9px;color:#93c5fd;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;display:block}
+.finished-state{text-align:center;padding:10px 0;position:relative;z-index:2;animation:slideUp .4s ease both}
+.finished-icon{font-size:36px;margin-bottom:6px}
+.finished-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px}
+.finished-sub{font-size:12px;color:#93c5fd}
 
-        .bg-pattern {
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 15v10m-5-5h10' stroke='currentColor' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-            color: var(--pattern-color);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .header-section {
-            background-color: var(--bg-header);
-            padding: 24px 20px 28px;
-            border-bottom: 1px solid var(--border-color);
-            position: relative;
-            z-index: 1;
-            transition: background-color 0.4s ease;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .dev-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: var(--text-muted);
-            text-decoration: none;
-            backdrop-filter: blur(8px);
-            transition: transform 0.2s;
-        }
-        .dev-badge:active { transform: scale(0.95); }
-        .dev-badge strong { color: var(--text-main); font-weight: 600; }
-
-        .theme-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            backdrop-filter: blur(8px);
-            font-family: inherit;
-            transition: transform 0.2s, background 0.3s;
-        }
-        .theme-toggle:active { transform: scale(0.95); }
-        
-        .theme-icon { position: relative; width: 14px; height: 14px; }
-        .theme-icon svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        [data-theme="dark"] .icon-sun { opacity: 0; transform: rotate(90deg) scale(0); }
-        [data-theme="light"] .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0); }
-
-        .select-wrapper {
-            position: relative;
-            margin-bottom: 24px;
-        }
-        .custom-select {
-            width: 100%;
-            appearance: none;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            font-size: 16px;
-            font-weight: 700;
-            font-family: inherit;
-            padding: 14px 44px 14px 18px;
-            border-radius: 16px;
-            outline: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .custom-select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px var(--accent-glow);
-        }
-        .select-icon {
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-            transition: transform 0.3s ease;
-        }
-        .custom-select:focus + .select-icon { transform: translateY(-50%) rotate(180deg); color: var(--accent); }
-
-        .countdown-display {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .unit-title-area { margin-bottom: 4px; }
-        .unit-main-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.3;
-            margin-bottom: 6px;
-            animation: fadeIn 0.4s ease;
-        }
-        .unit-date-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 500;
-        }
-
-        .badge-month-day {
-            align-self: flex-start;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 12px;
-        }
-        .badge-month-day svg { color: var(--accent); }
-
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-        .time-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px 8px;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .time-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
-        }
-        .time-val {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .time-lbl {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .list-container {
-            flex: 1;
-            padding: 24px 20px;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-            scroll-behavior: smooth;
-        }
-        .list-container::-webkit-scrollbar { width: 0; background: transparent; }
-
-        .list-header {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .unit-list { display: flex; flex-direction: column; gap: 12px; }
-
-        .list-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .list-card::after {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0; width: 4px;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .list-card:hover {
-            border-color: var(--border-active);
-            transform: translateY(-2px);
-        }
-        .list-card.active {
-            background: var(--accent-glow);
-            border-color: var(--accent);
-        }
-        .list-card.active::after { opacity: 1; }
-        
-        .card-info { display: flex; flex-direction: column; gap: 6px; }
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-            transition: color 0.3s ease;
-        }
-        .list-card.active .card-title { color: var(--accent); }
-        .card-date {
-            font-size: 12px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-badge {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 20px;
-            letter-spacing: 0.3px;
-        }
-        .status-upcoming {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 4px 12px var(--accent-glow);
-        }
-        .status-done {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            color: var(--success);
-        }
-
-        .finished-alert {
-            background: var(--success-glow);
-            border: 1px solid var(--success);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            animation: fadeIn 0.4s ease;
-        }
-        .finished-icon { font-size: 36px; margin-bottom: 12px; }
-        .finished-text { font-size: 20px; font-weight: 800; color: var(--success); }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
+.content-col{display:flex;flex-direction:column;min-height:0}
+.list-section{flex:1;overflow-y:auto;padding:14px 14px 18px;scrollbar-width:thin;scrollbar-color:var(--scrollbar-thumb) transparent}
+.list-section::-webkit-scrollbar{width:3px}
+.list-section::-webkit-scrollbar-track{background:transparent}
+.list-section::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:10px}
+.list-title{font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:10px;padding-left:4px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.05em}
+.unit-card{
+  padding:13px 14px;border-radius:16px;border:1.5px solid var(--border-color);
+  margin-bottom:8px;background:var(--bg-card);cursor:pointer;
+  transition:background .3s cubic-bezier(.4,0,.2,1), border-color .3s cubic-bezier(.4,0,.2,1), box-shadow .35s cubic-bezier(.4,0,.2,1), transform .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.unit-card:hover{background:var(--bg-card-hover);transform:translateX(2px)}
+.unit-card.selected{
+  border-color:transparent;
+  background:
+    linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+    linear-gradient(120deg, var(--accent-blue), var(--accent-blue-light)) border-box;
+  box-shadow:0 14px 32px rgba(59,130,246,0.2), 0 0 0 1px rgba(59,130,246,0.12) inset;
+  transform:translateX(0) scale(1.01);
+  animation:selectGlow .5s ease both;
+}
+@keyframes selectGlow{
+  0%{box-shadow:0 0 0 0 rgba(59,130,246,0.45), 0 0 0 1px rgba(59,130,246,0.12) inset}
+  100%{box-shadow:0 14px 32px rgba(59,130,246,0.2), 0 0 0 1px rgba(59,130,246,0.12) inset}
+}
+.unit-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(180deg,var(--accent-blue-light),var(--accent-blue));border-radius:0 6px 6px 0;opacity:0;transition:width .3s cubic-bezier(.4,0,.2,1), opacity .3s ease}
+.unit-card.selected::before{width:4px;opacity:1}
+.unit-card.passed{opacity:.5}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
+.unit-name{font-size:15px;font-weight:700;color:var(--text-primary);line-height:1.3;transition:color .3s ease}
+.unit-card.selected .unit-name{color:var(--accent-blue-light)}
+.unit-sub{font-size:11.5px;color:var(--text-muted);margin-top:1px}
+.badge{flex-shrink:0;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.badge-upcoming{color:#fff;background:var(--accent-blue)}
+.badge-done{color:var(--text-muted);background:rgba(148,163,184,0.12)}
+.badge-row{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.selected-check{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent-blue-light),var(--accent-blue));
+  color:#fff;box-shadow:0 3px 8px rgba(59,130,246,0.4);
+  animation:checkPop .35s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes checkPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.date-pill{font-size:11.5px;color:var(--text-secondary);display:flex;align-items:center;gap:5px}
+</style>
 </head>
 <body>
-
-<div class="app-container">
-    <div class="bg-pattern"></div>
-    
-    <div class="header-section">
-        <div class="top-bar">
-            <a href="https://linkedin.com/in/RahatAhmedX" target="_blank" rel="noopener noreferrer" class="dev-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
-                Developed by <strong>Rahat</strong>
-            </a>
-            <button class="theme-toggle" id="themeBtn">
-                <div class="theme-icon">
-                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                </div>
-                <span id="themeLabel">ডার্ক মোড</span>
-            </button>
+<div class="app-wrapper">
+  <div class="header-section">
+    <div class="top-bar">
+      <a href="https://linkedin.com/in/RahatAhmedX" target="_blank" rel="noopener noreferrer" class="dev-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Developed by <strong style="color:#bfdbfe">Rahat</strong>
+      </a>
+      <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+        <div class="toggle-icon-wrap">
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </div>
-
-        <div class="select-wrapper">
-            <select class="custom-select" id="uniSelect"></select>
-            <svg class="select-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-
-        <div id="mainTimerArea"></div>
+        <span class="toggle-label" id="toggleLabel">ডার্ক মোড</span>
+      </button>
     </div>
 
-    <div class="list-container">
-        <div class="list-header">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            সকল ইউনিট
-        </div>
-        <div class="unit-list" id="unitListArea"></div>
+    <div class="uni-select-wrap">
+      <select class="styled-select" id="uniSelect"></select>
+      <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </div>
+
+    <div id="nextUnitContent"></div>
+  </div>
+
+  <div class="content-col">
+    <div class="list-section">
+      <div class="list-title" id="listTitle"></div>
+      <div id="unitsGrid"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-const DB = {
-    "DU": {
-        name: "ঢাকা বিশ্ববিদ্যালয় (DU)",
-        units: [
-            { id: "iba", name: "IBA Unit", date: "2026-12-05T10:00:00" },
-            { id: "a", name: "A Unit (বিজ্ঞান)", date: "2026-12-12T10:00:00" },
-            { id: "b", name: "B Unit (কলা, আইন ও সামাজিক বিজ্ঞান)", date: "2026-12-19T10:00:00" },
-            { id: "cha", name: "CHA Unit (চারুকলা)", date: "2026-12-22T10:00:00" },
-            { id: "c", name: "C Unit (ব্যবসায় শিক্ষা)", date: "2026-12-26T10:00:00" }
-        ]
-    }
+const toBnNum = n => n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+const fmtDate = d => new Date(d).toLocaleDateString('bn-BD', { day:'numeric', month:'long' });
+const fmtDay = d => new Date(d).toLocaleDateString('bn-BD', { weekday:'long' });
+const fmtTime = d => new Date(d).toLocaleTimeString('bn-BD', { hour:'numeric', minute:'2-digit' });
+
+const SVG_CAL = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`;
+const SVG_CAL13 = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`;
+const SVG_BOOK = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
+const SVG_HOURGLASS = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>`;
+
+const UNIVERSITIES = {
+  DU: {
+    name: "ঢাকা বিশ্ববিদ্যালয় (DU)",
+    units: [
+      { id:'iba', code:'IBA', name:'IBA Unit', sub:'ব্যবসায় প্রশাসন ইনস্টিটিউট', date:'2026-12-05T10:00:00' },
+      { id:'a',   code:'A',   name:'A Unit (বিজ্ঞান)', sub:'বিজ্ঞান অনুষদ', date:'2026-12-12T10:00:00' },
+      { id:'b',   code:'B',   name:'B Unit (কলা, আইন ও সামাজিক বিজ্ঞান)', sub:'কলা, আইন ও সামাজিক বিজ্ঞান অনুষদ', date:'2026-12-19T10:00:00' },
+      { id:'cha', code:'CHA', name:'CHA Unit (চারুকলা)', sub:'চারুকলা অনুষদ', date:'2026-12-22T10:00:00' },
+      { id:'c',   code:'C',   name:'C Unit (ব্যবসায় শিক্ষা)', sub:'ব্যবসায় শিক্ষা অনুষদ', date:'2026-12-26T10:00:00' }
+    ]
+  }
 };
 
-const engToBn = num => String(num).replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
-const padZ = num => String(num).padStart(2, '0');
+const APP_VERSION = 'v2';
+if (localStorage.getItem('vc_appVersion') !== APP_VERSION) {
+  localStorage.removeItem('vc_uni');
+  localStorage.removeItem('vc_unit');
+  localStorage.setItem('vc_appVersion', APP_VERSION);
+}
 
-const formatFullDate = dStr => {
-    const d = new Date(dStr);
-    const date = d.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
-    const day = d.toLocaleDateString('bn-BD', { weekday: 'long' });
-    return `${date} • ${day}`;
-};
+let currentUni = localStorage.getItem('vc_uni');
+if (!currentUni || !UNIVERSITIES[currentUni]) currentUni = 'DU';
+let currentUnitId = localStorage.getItem('vc_unit');
 
-const calcMonthsDays = (now, target) => {
-    if (target < now) return { m: 0, d: 0 };
-    let m = (target.getFullYear() - now.getFullYear()) * 12 + (target.getMonth() - now.getMonth());
-    let d = target.getDate() - now.getDate();
-    if (d < 0) {
-        m -= 1;
-        let prevMonth = new Date(target.getFullYear(), target.getMonth(), 0);
-        d += prevMonth.getDate();
-    }
-    return { m, d };
-};
+function getStatus(dateStr, now){
+  const d = new Date(dateStr), diff = d - now;
+  if (diff < 0) return { status:'passed' };
+  return {
+    status:'upcoming',
+    days: Math.floor(diff/86400000),
+    hours: Math.floor((diff%86400000)/3600000),
+    minutes: Math.floor((diff%3600000)/60000),
+    seconds: Math.floor((diff%60000)/1000)
+  };
+}
 
-let activeUni = localStorage.getItem('adm_uni') || 'DU';
-if (!DB[activeUni]) activeUni = Object.keys(DB)[0];
+function monthsAndDays(now, target){
+  let months = (target.getFullYear()-now.getFullYear())*12 + (target.getMonth()-now.getMonth());
+  let days = target.getDate() - now.getDate();
+  if (days < 0){
+    months -= 1;
+    const prevMonthLastDay = new Date(target.getFullYear(), target.getMonth(), 0).getDate();
+    days += prevMonthLastDay;
+  }
+  if (months < 0) months = 0;
+  if (days < 0) days = 0;
+  return { months, days };
+}
 
-let activeUnit = localStorage.getItem('adm_unit');
-const validateUnit = () => {
-    const list = DB[activeUni].units;
-    if (!list.find(u => u.id === activeUnit)) activeUnit = list[0].id;
-};
-validateUnit();
+function populateUniSelect(){
+  const sel = document.getElementById('uniSelect');
+  sel.innerHTML = Object.keys(UNIVERSITIES).map(key =>
+    `<option value="${key}" ${key===currentUni?'selected':''}>${UNIVERSITIES[key].name}</option>`
+  ).join('');
+}
 
-const selectEl = document.getElementById('uniSelect');
-const timerArea = document.getElementById('mainTimerArea');
-const listArea = document.getElementById('unitListArea');
-
-const initSelect = () => {
-    selectEl.innerHTML = Object.entries(DB).map(([key, data]) => 
-        `<option value="${key}" ${key === activeUni ? 'selected' : ''}>${data.name}</option>`
-    ).join('');
-};
-
-const drawList = () => {
+function ensureValidUnit(){
+  const units = UNIVERSITIES[currentUni].units;
+  if (!currentUnitId || !units.find(u => u.id === currentUnitId)){
     const now = new Date();
-    const units = DB[activeUni].units;
-    
-    listArea.innerHTML = units.map(u => {
-        const isPast = new Date(u.date) < now;
-        const activeCls = u.id === activeUnit ? 'active' : '';
-        const badgeHTML = isPast 
-            ? `<span class="status-badge status-done">সম্পন্ন</span>` 
-            : `<span class="status-badge status-upcoming">আসন্ন</span>`;
-            
-        return `
-            <div class="list-card ${activeCls}" data-id="${u.id}">
-                <div class="card-info">
-                    <span class="card-title">${u.name}</span>
-                    <span class="card-date">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                        ${formatFullDate(u.date)}
-                    </span>
-                </div>
-                ${badgeHTML}
-            </div>
-        `;
-    }).join('');
+    const upcoming = units.find(u => getStatus(u.date, now).status === 'upcoming');
+    currentUnitId = upcoming ? upcoming.id : units[0].id;
+  }
+}
 
-    document.querySelectorAll('.list-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            activeUnit = e.currentTarget.getAttribute('data-id');
-            localStorage.setItem('adm_unit', activeUnit);
-            drawList();
-            tick(true);
-        });
+function renderUnits(){
+  const units = UNIVERSITIES[currentUni].units;
+  const now = new Date();
+  document.getElementById('listTitle').innerHTML = `${SVG_BOOK} সকল ইউনিট (${toBnNum(units.length)})`;
+  const grid = document.getElementById('unitsGrid');
+  grid.innerHTML = units.map(u => {
+    const s = getStatus(u.date, now);
+    const passed = s.status === 'passed';
+    const selected = u.id === currentUnitId;
+    const badge = passed
+      ? `<span class="badge badge-done">সম্পন্ন</span>`
+      : `<span class="badge badge-upcoming">আসন্ন</span>`;
+    const checkIcon = selected
+      ? `<span class="selected-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`
+      : '';
+    return `
+    <div class="unit-card ${selected?'selected':''} ${passed?'passed':''}" data-id="${u.id}">
+      <div class="card-top">
+        <div>
+          <div class="unit-name">${u.name}</div>
+          <div class="unit-sub">${u.sub}</div>
+        </div>
+        <div class="badge-row">${checkIcon}${badge}</div>
+      </div>
+      <div class="date-pill">${SVG_CAL} ${fmtDate(u.date)}, ২০২৬ • ${fmtDay(u.date)}</div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.unit-card').forEach(card => {
+    card.addEventListener('click', () => {
+      currentUnitId = card.getAttribute('data-id');
+      saveState();
+      renderUnits();
+      renderHero(true);
     });
-};
+  });
+}
 
-const tick = (force = false) => {
-    const unit = DB[activeUni].units.find(u => u.id === activeUnit);
-    if (!unit) return;
+function renderHero(force){
+  const units = UNIVERSITIES[currentUni].units;
+  const unit = units.find(u => u.id === currentUnitId);
+  const nec = document.getElementById('nextUnitContent');
+  const now = new Date();
+  const s = getStatus(unit.date, now);
 
-    const now = new Date();
-    const target = new Date(unit.date);
-    const diff = target - now;
+  if (s.status === 'passed'){
+    nec.innerHTML = `
+    <div class="finished-state">
+      <div class="finished-icon">🎓</div>
+      <div class="finished-title">${unit.name} সম্পন্ন হয়েছে</div>
+      <div class="finished-sub">${UNIVERSITIES[currentUni].name}</div>
+    </div>`;
+    return;
+  }
 
-    if (diff < 0) {
-        if (force || !timerArea.querySelector('.finished-alert')) {
-            timerArea.innerHTML = `
-                <div class="unit-title-area">
-                    <div class="unit-main-title">${unit.name}</div>
-                    <div class="unit-date-subtitle">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                        ${formatFullDate(unit.date)}
-                    </div>
-                </div>
-                <div class="finished-alert" style="margin-top:16px;">
-                    <div class="finished-icon">🎉</div>
-                    <div class="finished-text">পরীক্ষা সম্পন্ন হয়েছে!</div>
-                </div>
-            `;
-        }
-        return;
-    }
+  const existingTitle = nec.querySelector('.exam-title');
+  if (!force && existingTitle && existingTitle.textContent === unit.name){
+    const spans = nec.querySelectorAll('.countdown-value');
+    const vals = [s.days, s.hours, s.minutes, s.seconds];
+    vals.forEach((v,i) => {
+      const t = toBnNum(String(v).padStart(2,'0'));
+      if (spans[i] && spans[i].textContent !== t) spans[i].textContent = t;
+    });
+    return;
+  }
 
-    const { m, d } = calcMonthsDays(now, target);
-    let mdStr = "";
-    if (m > 0 && d > 0) mdStr = `${engToBn(m)} মাস ${engToBn(d)} দিন বাকি`;
-    else if (m > 0) mdStr = `${engToBn(m)} মাস বাকি`;
-    else if (d > 0) mdStr = `${engToBn(d)} দিন বাকি`;
-    else mdStr = "আজকেই পরীক্ষা!";
+  const md = monthsAndDays(now, new Date(unit.date));
+  const vals = [s.days, s.hours, s.minutes, s.seconds];
+  const labels = ['দিন','ঘণ্টা','মিনিট','সেকেন্ড'];
+  const boxes = vals.map((v,i) => `
+    <div class="countdown-box">
+      <span class="countdown-value">${toBnNum(String(v).padStart(2,'0'))}</span>
+      <span class="countdown-label">${labels[i]}</span>
+    </div>`).join('');
+  const approxText = md.months > 0
+    ? `<b>${toBnNum(md.months)}</b> মাস <b>${toBnNum(md.days)}</b> দিন বাকি`
+    : `<b>${toBnNum(md.days)}</b> দিন বাকি`;
 
-    const days = Math.floor(diff / 86400000);
-    const hrs = Math.floor((diff / 3600000) % 24);
-    const mins = Math.floor((diff / 60000) % 60);
-    const secs = Math.floor((diff / 1000) % 60);
-    
-    const vArr = [days, hrs, mins, secs];
-    const lArr = ['দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড'];
+  nec.innerHTML = `
+    <div class="exam-title">${unit.name}</div>
+    <div class="exam-date-line">${SVG_CAL13} ${fmtDate(unit.date)}, ২০২৬ • ${fmtDay(unit.date)}</div>
+    <div class="countdown-grid">${boxes}</div>
+    <div class="approx-pill">${SVG_HOURGLASS} ${approxText}</div>`;
+}
 
-    const existTitle = timerArea.querySelector('.unit-main-title');
-    
-    if (!force && existTitle && existTitle.textContent === unit.name) {
-        const valNodes = timerArea.querySelectorAll('.time-val');
-        vArr.forEach((v, i) => {
-            const str = engToBn(padZ(v));
-            if (valNodes[i] && valNodes[i].textContent !== str) valNodes[i].textContent = str;
-        });
-        const badgeNode = timerArea.querySelector('.badge-month-day span');
-        if (badgeNode && badgeNode.textContent !== mdStr) badgeNode.textContent = mdStr;
-    } else {
-        const gridHTML = vArr.map((v, i) => `
-            <div class="time-box">
-                <span class="time-val">${engToBn(padZ(v))}</span>
-                <span class="time-lbl">${lArr[i]}</span>
-            </div>
-        `).join('');
+function saveState(){
+  localStorage.setItem('vc_uni', currentUni);
+  localStorage.setItem('vc_unit', currentUnitId);
+}
 
-        timerArea.innerHTML = `
-            <div class="countdown-display">
-                <div class="unit-title-area">
-                    <div class="unit-main-title">${unit.name}</div>
-                    <div class="unit-date-subtitle">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                        ${formatFullDate(unit.date)}
-                    </div>
-                </div>
-                <div class="badge-month-day">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span>${mdStr}</span>
-                </div>
-                <div class="time-grid">${gridHTML}</div>
-            </div>
-        `;
-    }
-};
+function refresh(force){
+  ensureValidUnit();
+  if (force) renderUnits();
+  renderHero(force !== false);
+  saveState();
+}
 
-selectEl.addEventListener('change', e => {
-    activeUni = e.target.value;
-    localStorage.setItem('adm_uni', activeUni);
-    validateUnit();
-    localStorage.setItem('adm_unit', activeUnit);
-    drawList();
-    tick(true);
+document.getElementById('uniSelect').addEventListener('change', e => {
+  currentUni = e.target.value;
+  currentUnitId = null;
+  refresh(true);
 });
 
-const themeBtn = document.getElementById('themeBtn');
-const lbl = document.getElementById('themeLabel');
-const meta = document.getElementById('theme-meta');
-const html = document.documentElement;
-
-const applyTheme = t => {
-    html.setAttribute('data-theme', t);
-    lbl.textContent = t === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
-    meta.setAttribute('content', t === 'dark' ? '#172439' : '#f8fafc');
-};
-
-let currentTheme = localStorage.getItem('adm_theme') || 'dark';
-applyTheme(currentTheme);
-
-themeBtn.addEventListener('click', () => {
-    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('adm_theme', currentTheme);
-    applyTheme(currentTheme);
+const darkToggle = document.getElementById('darkToggle');
+const savedTheme = localStorage.getItem('vc_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('toggleLabel').textContent = savedTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
+document.getElementById('theme-meta').setAttribute('content', savedTheme === 'dark' ? '#0f172a' : '#f0f4ff');
+darkToggle.addEventListener('click', () => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const t = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('vc_theme', t);
+  document.getElementById('theme-meta').setAttribute('content', t === 'dark' ? '#0f172a' : '#f0f4ff');
+  document.getElementById('toggleLabel').textContent = t === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
 });
 
-initSelect();
-drawList();
-tick(true);
-setInterval(() => tick(false), 1000);
+populateUniSelect();
+refresh(true);
+setInterval(() => refresh(false), 1000);
 </script>
 </body>
 </html>
