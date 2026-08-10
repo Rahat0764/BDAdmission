@@ -117,7 +117,7 @@ body::before{
 [data-theme="light"] .icon-sun{opacity:1;transform:rotate(0deg) scale(1)}
 .toggle-label{font-size:11px;font-weight:600;color:#bfdbfe;white-space:nowrap;pointer-events:none}
 
-.uni-select-wrap{position:relative;z-index:2;margin-bottom:16px}
+.uni-select-wrap{position:relative;z-index:2;margin-bottom:12px}
 .styled-select{
   width:100%;appearance:none;
   background:rgba(0,0,0,0.22);backdrop-filter:blur(10px);
@@ -129,6 +129,14 @@ body::before{
 }
 .styled-select:focus{border-color:var(--accent-blue-light)}
 .select-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#93c5fd;pointer-events:none}
+
+.admission-info{
+  font-size:11.5px;color:#dbeafe;margin-bottom:14px;position:relative;z-index:2;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:9px 12px;display:none;flex-direction:column;gap:4px;
+}
+.admission-info.has-content{display:flex}
+.admission-info b{color:#fff}
 
 .exam-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:4px;position:relative;z-index:2;animation:slideUp .4s ease both}
 .exam-date-line{font-size:12px;color:#93c5fd;margin-bottom:12px;display:flex;align-items:center;gap:6px;position:relative;z-index:2;font-weight:500;animation:slideUp .4s ease .05s both}
@@ -226,6 +234,8 @@ body::before{
       <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </div>
 
+    <div class="admission-info" id="admissionInfo"></div>
+
     <div id="nextUnitContent"></div>
   </div>
 
@@ -241,7 +251,7 @@ body::before{
 const toBnNum = n => n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
 const fmtDate = d => new Date(d).toLocaleDateString('bn-BD', { day:'numeric', month:'long' });
 const fmtDay = d => new Date(d).toLocaleDateString('bn-BD', { weekday:'long' });
-const fmtTime = d => new Date(d).toLocaleTimeString('bn-BD', { hour:'numeric', minute:'2-digit' });
+const fmtYear = d => toBnNum(new Date(d).getFullYear());
 
 const SVG_CAL = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`;
 const SVG_CAL13 = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`;
@@ -258,19 +268,66 @@ const UNIVERSITIES = {
       { id:'cha', code:'CHA', name:'CHA Unit (চারুকলা)', sub:'চারুকলা অনুষদ', date:'2026-12-22T10:00:00' },
       { id:'c',   code:'C',   name:'C Unit (ব্যবসায় শিক্ষা)', sub:'ব্যবসায় শিক্ষা অনুষদ', date:'2026-12-26T10:00:00' }
     ]
+  },
+  JNU: {
+    name: "জগন্নাথ বিশ্ববিদ্যালয় (JNU)",
+    applyFrom: '2026-11-15',
+    applyTo: '2026-12-10',
+    classStart: '2027-04-04',
+    examNote: 'সকল ইউনিটের পরীক্ষা ঢাকায়, MCQ পদ্ধতিতে অনুষ্ঠিত হবে',
+    units: [
+      { id:'a', code:'A', name:'A Unit (বিজ্ঞান)', sub:'বিজ্ঞান অনুষদ', date:'2027-01-01T10:00:00' },
+      { id:'e', code:'E', name:'E Unit (চারুকলা)', sub:'চারুকলা অনুষদ', date:'2027-01-08T10:00:00' },
+      { id:'b', code:'B', name:'B Unit (কলা ও আইন অনুষদ)', sub:'কলা ও আইন অনুষদ', date:'2027-01-15T10:00:00' },
+      { id:'c', code:'C', name:'C Unit (বাণিজ্য)', sub:'বাণিজ্য অনুষদ', date:'2027-01-22T10:00:00' },
+      { id:'d', code:'D', name:'D Unit (সামাজিক বিজ্ঞান)', sub:'সামাজিক বিজ্ঞান অনুষদ', date:'2027-01-23T10:00:00' }
+    ]
   }
 };
 
-const APP_VERSION = 'v2';
+const APP_VERSION = 'v3';
 if (localStorage.getItem('vc_appVersion') !== APP_VERSION) {
-  localStorage.removeItem('vc_uni');
-  localStorage.removeItem('vc_unit');
+  Object.keys(localStorage).forEach(k => { if (k.startsWith('vc_')) localStorage.removeItem(k); });
   localStorage.setItem('vc_appVersion', APP_VERSION);
 }
 
-let currentUni = localStorage.getItem('vc_uni');
-if (!currentUni || !UNIVERSITIES[currentUni]) currentUni = 'DU';
-let currentUnitId = localStorage.getItem('vc_unit');
+// ---- URL helpers ----
+function getUniFromPath(){
+  const seg = location.pathname.split('/').filter(Boolean)[0];
+  if (!seg) return null;
+  const key = Object.keys(UNIVERSITIES).find(k => k.toLowerCase() === seg.toLowerCase());
+  return key || null;
+}
+function getUnitCodeFromHash(){
+  const h = decodeURIComponent(location.hash.replace('#',''));
+  return h || null;
+}
+function updateURL(){
+  const path = '/' + currentUni;
+  const uni = UNIVERSITIES[currentUni];
+  const unit = uni.units.find(u => u.id === currentUnitId);
+  const hash = unit ? '#' + unit.code : '';
+  const newUrl = path + hash;
+  const currentFull = location.pathname + location.hash;
+  if (currentFull !== newUrl) history.replaceState(null, '', newUrl);
+}
+
+// ---- initial state ----
+let currentUni = getUniFromPath();
+const uniCameFromUrl = !!currentUni;
+if (!currentUni){
+  currentUni = localStorage.getItem('vc_uni');
+  if (!currentUni || !UNIVERSITIES[currentUni]) currentUni = 'DU';
+}
+
+let currentUnitId = null;
+if (uniCameFromUrl){
+  const hashCode = getUnitCodeFromHash();
+  if (hashCode){
+    const found = UNIVERSITIES[currentUni].units.find(u => u.code.toLowerCase() === hashCode.toLowerCase());
+    if (found) currentUnitId = found.id;
+  }
+}
 
 function getStatus(dateStr, now){
   const d = new Date(dateStr), diff = d - now;
@@ -307,9 +364,36 @@ function populateUniSelect(){
 function ensureValidUnit(){
   const units = UNIVERSITIES[currentUni].units;
   if (!currentUnitId || !units.find(u => u.id === currentUnitId)){
-    const now = new Date();
-    const upcoming = units.find(u => getStatus(u.date, now).status === 'upcoming');
-    currentUnitId = upcoming ? upcoming.id : units[0].id;
+    const savedUnit = localStorage.getItem('vc_unit_' + currentUni);
+    if (savedUnit && units.find(u => u.id === savedUnit)){
+      currentUnitId = savedUnit;
+    } else {
+      const now = new Date();
+      const upcoming = units.find(u => getStatus(u.date, now).status === 'upcoming');
+      currentUnitId = upcoming ? upcoming.id : units[0].id;
+    }
+  }
+}
+
+function renderAdmissionInfo(){
+  const uni = UNIVERSITIES[currentUni];
+  const wrap = document.getElementById('admissionInfo');
+  const lines = [];
+  if (uni.applyFrom && uni.applyTo){
+    lines.push(`📝 ভর্তি আবেদন: <b>${fmtDate(uni.applyFrom)} - ${fmtDate(uni.applyTo)}, ${fmtYear(uni.applyTo)}</b>`);
+  }
+  if (uni.classStart){
+    lines.push(`🎓 ক্লাস শুরু: <b>${fmtDate(uni.classStart)}, ${fmtYear(uni.classStart)}</b>`);
+  }
+  if (uni.examNote){
+    lines.push(`ℹ️ ${uni.examNote}`);
+  }
+  if (lines.length){
+    wrap.innerHTML = lines.map(l => `<span>${l}</span>`).join('');
+    wrap.classList.add('has-content');
+  } else {
+    wrap.innerHTML = '';
+    wrap.classList.remove('has-content');
   }
 }
 
@@ -337,7 +421,7 @@ function renderUnits(){
         </div>
         <div class="badge-row">${checkIcon}${badge}</div>
       </div>
-      <div class="date-pill">${SVG_CAL} ${fmtDate(u.date)}, ২০২৬ • ${fmtDay(u.date)}</div>
+      <div class="date-pill">${SVG_CAL} ${fmtDate(u.date)}, ${fmtYear(u.date)} • ${fmtDay(u.date)}</div>
     </div>`;
   }).join('');
 
@@ -393,19 +477,24 @@ function renderHero(force){
 
   nec.innerHTML = `
     <div class="exam-title">${unit.name}</div>
-    <div class="exam-date-line">${SVG_CAL13} ${fmtDate(unit.date)}, ২০২৬ • ${fmtDay(unit.date)}</div>
+    <div class="exam-date-line">${SVG_CAL13} ${fmtDate(unit.date)}, ${fmtYear(unit.date)} • ${fmtDay(unit.date)}</div>
     <div class="countdown-grid">${boxes}</div>
     <div class="approx-pill">${SVG_HOURGLASS} ${approxText}</div>`;
 }
 
 function saveState(){
   localStorage.setItem('vc_uni', currentUni);
-  localStorage.setItem('vc_unit', currentUnitId);
+  localStorage.setItem('vc_unit_' + currentUni, currentUnitId);
+  updateURL();
 }
 
 function refresh(force){
   ensureValidUnit();
-  if (force) renderUnits();
+  if (force){
+    populateUniSelect();
+    renderAdmissionInfo();
+    renderUnits();
+  }
   renderHero(force !== false);
   saveState();
 }
@@ -430,7 +519,6 @@ darkToggle.addEventListener('click', () => {
   document.getElementById('toggleLabel').textContent = t === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
 });
 
-populateUniSelect();
 refresh(true);
 setInterval(() => refresh(false), 1000);
 </script>
