@@ -738,11 +738,11 @@
     const boxes = vals.map((v, i) => `<div class="countdown-box"><span class="countdown-value">${toBnNum(String(v).padStart(2, '0'))}</span><span class="countdown-label">${labels[i]}</span></div>`).join('');
     const approxText = md.months > 0 ? `<b>${toBnNum(md.months)}</b> মাস <b>${toBnNum(md.days)}</b> দিন বাকি` : `<b>${toBnNum(md.days)}</b> দিন বাকি`;
     
-    // Check if running inside the Android App (via URL param or JS Interface)
+    
     const isApp = new URLSearchParams(window.location.search).get('source') === 'app' || typeof AndroidApp !== 'undefined';
     const apkUrl = window.APK_URL || '#';
     
-    // Only show install button if NOT in the app
+    
     const installBtnHtml = isApp ? '' : `
       <a href="${apkUrl}" class="install-btn" target="_blank" rel="noopener">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -764,7 +764,7 @@
     localStorage.setItem('vc_unit_' + currentUni, currentUnitId);
     updateURL();
     
-    // Android App Widget Integration
+    
     if (typeof AndroidApp !== 'undefined') {
         const uniName = UNIVERSITIES[currentUni].name;
         const unit = UNIVERSITIES[currentUni].units.find(u => u.id === currentUnitId);
