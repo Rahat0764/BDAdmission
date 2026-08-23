@@ -314,19 +314,24 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--accent-blue);
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-light));
     color: #fff;
     border-radius: 20px;
     padding: 6px 13px;
     font-size: 12.5px;
     font-weight: 700;
     text-decoration: none;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    animation: slideUp .4s ease .15s both;
-    transition: transform .15s ease, filter .15s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    animation: slideUp .4s ease .15s both, installGlow 2.4s ease-in-out .6s infinite;
+    transition: transform .15s ease, box-shadow .2s ease;
   }
-  .install-pill:hover { filter: brightness(1.1); }
+  .install-pill:hover { box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45); }
   .install-pill:active { transform: scale(.96); }
+
+  @keyframes installGlow {
+    0%, 100% { box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+    50%      { box-shadow: 0 4px 20px rgba(59, 130, 246, 0.6); }
+  }
 
   .countdown-grid {
     display: grid;
