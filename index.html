@@ -11,9 +11,6 @@
 <title>বিশ্ববিদ্যালয় ভর্তি পরীক্ষা</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script>
-  window.APK_URL = "";
-</script>
 <style>
   :root {
     --bg-primary: #0f172a;
@@ -49,8 +46,16 @@
     --scrollbar-thumb: #bfdbfe;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; overflow: hidden; }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
 
   body {
     font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
@@ -198,7 +203,11 @@
     transition: opacity .2s ease;
   }
 
-  .select-inner { position: relative; flex: 1; min-width: 0; }
+  .select-inner {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
 
   .styled-select {
     width: 100%;
@@ -274,6 +283,51 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .approx-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    padding: 6px 13px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #dbeafe;
+    animation: slideUp .4s ease .1s both;
+  }
+  .approx-pill b { color: #fff; font-weight: 800; }
+
+  .install-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-blue);
+    color: #fff;
+    border-radius: 20px;
+    padding: 6px 13px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    animation: slideUp .4s ease .15s both;
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .install-pill:hover { filter: brightness(1.1); }
+  .install-pill:active { transform: scale(.96); }
+
   .countdown-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -319,48 +373,6 @@
     margin-top: 4px;
     display: block;
   }
-
-  .hero-bottom-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 12px;
-    position: relative;
-    z-index: 2;
-    animation: slideUp .4s ease .1s both;
-  }
-
-  .approx-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 20px;
-    padding: 6px 13px;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #dbeafe;
-  }
-  .approx-pill b { color: #fff; font-weight: 800; }
-
-  .install-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-light));
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 7px 12px;
-    border-radius: 20px;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    transition: transform .2s, box-shadow .2s;
-  }
-  .install-btn:hover { box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4); }
-  .install-btn:active { transform: scale(0.96); }
 
   .finished-state {
     text-align: center;
@@ -522,6 +534,7 @@
     </div>
 
     <div class="admission-info" id="admissionInfo"></div>
+
     <div id="nextUnitContent"></div>
   </div>
 
@@ -543,72 +556,117 @@
   const SVG_CAL13 = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`;
   const SVG_BOOK = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
   const SVG_HOURGLASS = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>`;
+  const SVG_DOWNLOAD = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
 
+  // True when the page is running inside the native Android wrapper app
+  // (MainActivity.java injects a "window.Android" JS interface — see the
+  // android-app/ folder). Used to hide the "Install App" pill once someone
+  // already has the app, and to push widget updates back to Android.
+  const insideNativeApp = typeof Android !== 'undefined';
+
+  // Fetched once from /api/apk-url (reads the APK_URL env var on Vercel).
+  // Left null on the website until the fetch resolves, or forever if the
+  // env var isn't set / we're already inside the native app.
+  let installApkUrl = null;
+  if (!insideNativeApp) {
+    fetch('/api/apk-url').then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data && data.url) {
+          installApkUrl = data.url;
+          renderHero(true);
+        }
+      })
+      .catch(function () {});
+  }
+
+  // Each university carries its own crest (as a data URI, so the page needs no
+  // external image hosting) and a dark/light color theme derived from that crest.
   const UNIVERSITIES = {
     DU: {
       name: "ঢাকা বিশ্ববিদ্যালয় (DU)",
       logo: "assets/logo/du.png",
-      theme: { dark: { headerFrom: '#1e3a5f', headerTo: '#0f172a', accent: '#3b82f6', accentLight: '#60a5fa', glow: 'rgba(59,130,246,0.15)' }, light: { headerFrom: '#1d4ed8', headerTo: '#1e3a6e', accent: '#2563eb', accentLight: '#3b82f6', glow: 'rgba(37,99,235,0.1)' } },
-      applyFrom: '2026-11-11', applyTo: '2026-11-25', classStart: '2027-03-28',
+      theme: {
+        dark:  { headerFrom: '#1e3a5f', headerTo: '#0f172a', accent: '#3b82f6', accentLight: '#60a5fa', glow: 'rgba(59,130,246,0.15)' },
+        light: { headerFrom: '#1d4ed8', headerTo: '#1e3a6e', accent: '#2563eb', accentLight: '#3b82f6', glow: 'rgba(37,99,235,0.1)' }
+      },
+      applyFrom: '2026-11-11',
+      applyTo: '2026-11-25',
+      classStart: '2027-03-28',
       examNote: 'ভর্তি পরীক্ষা মোট ১২০ নম্বরে মূল্যায়ন করা হবে (পরীক্ষা ১০০ + SSC-HSC ফলাফল ২০)',
       units: [
-        { id: 'iba', code: 'IBA', name: 'IBA Unit', sub: 'ব্যবসায় প্রশাসন ইনস্টিটিউট', date: '2026-12-05T10:00:00' },
-        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান অনুষদ', date: '2026-12-12T11:00:00' },
-        { id: 'b', code: 'B', name: 'B Unit (কলা, আইন ও সামাজিক বিজ্ঞান)', sub: 'কলা, আইন ও সামাজিক বিজ্ঞান অনুষদ', date: '2026-12-19T11:00:00' },
-        { id: 'cha', code: 'CHA', name: 'CHA Unit (চারুকলা)', sub: 'চারুকলা অনুষদ', date: '2026-12-22T11:00:00' },
-        { id: 'c', code: 'C', name: 'C Unit (ব্যবসায় শিক্ষা)', sub: 'ব্যবসায় শিক্ষা অনুষদ', date: '2026-12-26T11:00:00' }
+        { id: 'iba', code: 'IBA', name: 'IBA Unit',                                   sub: 'ব্যবসায় প্রশাসন ইনস্টিটিউট',              date: '2026-12-05T10:00:00' },
+        { id: 'a',   code: 'A',   name: 'A Unit (বিজ্ঞান)',                            sub: 'বিজ্ঞান অনুষদ',                          date: '2026-12-12T11:00:00' },
+        { id: 'b',   code: 'B',   name: 'B Unit (কলা, আইন ও সামাজিক বিজ্ঞান)',          sub: 'কলা, আইন ও সামাজিক বিজ্ঞান অনুষদ',        date: '2026-12-19T11:00:00' },
+        { id: 'cha', code: 'CHA', name: 'CHA Unit (চারুকলা)',                          sub: 'চারুকলা অনুষদ',                          date: '2026-12-22T11:00:00' },
+        { id: 'c',   code: 'C',   name: 'C Unit (ব্যবসায় শিক্ষা)',                     sub: 'ব্যবসায় শিক্ষা অনুষদ',                    date: '2026-12-26T11:00:00' }
       ]
     },
     JNU: {
       name: "জগন্নাথ বিশ্ববিদ্যালয় (JNU)",
       logo: "assets/logo/jnu.png",
-      theme: { dark: { headerFrom: '#5c1a1a', headerTo: '#1c0f0a', accent: '#e0752e', accentLight: '#f2994a', glow: 'rgba(224,117,46,0.18)' }, light: { headerFrom: '#b91c1c', headerTo: '#7c2d12', accent: '#c2410c', accentLight: '#ea580c', glow: 'rgba(194,65,12,0.12)' } },
-      applyFrom: '2026-11-15', applyTo: '2026-12-10', classStart: '2027-04-04',
+      theme: {
+        dark:  { headerFrom: '#5c1a1a', headerTo: '#1c0f0a', accent: '#e0752e', accentLight: '#f2994a', glow: 'rgba(224,117,46,0.18)' },
+        light: { headerFrom: '#b91c1c', headerTo: '#7c2d12', accent: '#c2410c', accentLight: '#ea580c', glow: 'rgba(194,65,12,0.12)' }
+      },
+      applyFrom: '2026-11-15',
+      applyTo: '2026-12-10',
+      classStart: '2027-04-04',
       examNote: 'সকল ইউনিটের পরীক্ষা ঢাকায়, MCQ পদ্ধতিতে অনুষ্ঠিত হবে',
       units: [
-        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান অনুষদ', date: '2027-01-01T10:00:00' },
-        { id: 'e', code: 'E', name: 'E Unit (চারুকলা)', sub: 'চারুকলা অনুষদ', date: '2027-01-08T10:00:00' },
-        { id: 'b', code: 'B', name: 'B Unit (কলা ও আইন অনুষদ)', sub: 'কলা ও আইন অনুষদ', date: '2027-01-15T10:00:00' },
-        { id: 'c', code: 'C', name: 'C Unit (বাণিজ্য)', sub: 'বাণিজ্য অনুষদ', date: '2027-01-22T10:00:00' },
-        { id: 'd', code: 'D', name: 'D Unit (সামাজিক বিজ্ঞান)', sub: 'সামাজিক বিজ্ঞান অনুষদ', date: '2027-01-23T10:00:00' }
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)',            sub: 'বিজ্ঞান অনুষদ',            date: '2027-01-01T10:00:00' },
+        { id: 'e', code: 'E', name: 'E Unit (চারুকলা)',            sub: 'চারুকলা অনুষদ',            date: '2027-01-08T10:00:00' },
+        { id: 'b', code: 'B', name: 'B Unit (কলা ও আইন অনুষদ)',    sub: 'কলা ও আইন অনুষদ',          date: '2027-01-15T10:00:00' },
+        { id: 'c', code: 'C', name: 'C Unit (বাণিজ্য)',            sub: 'বাণিজ্য অনুষদ',            date: '2027-01-22T10:00:00' },
+        { id: 'd', code: 'D', name: 'D Unit (সামাজিক বিজ্ঞান)',    sub: 'সামাজিক বিজ্ঞান অনুষদ',    date: '2027-01-23T10:00:00' }
       ]
     },
     RU: {
       name: "রাজশাহী বিশ্ববিদ্যালয় (RU)",
       logo: "assets/logo/ru.png",
-      theme: { dark: { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#22c55e', accentLight: '#4ade80', glow: 'rgba(34,197,94,0.16)' }, light: { headerFrom: '#15803d', headerTo: '#14532d', accent: '#16a34a', accentLight: '#22c55e', glow: 'rgba(22,163,74,0.1)' } },
-      applyFrom: '2026-11-12', applyTo: '2026-11-27',
+      theme: {
+        dark:  { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#22c55e', accentLight: '#4ade80', glow: 'rgba(34,197,94,0.16)' },
+        light: { headerFrom: '#15803d', headerTo: '#14532d', accent: '#16a34a', accentLight: '#22c55e', glow: 'rgba(22,163,74,0.1)' }
+      },
+      applyFrom: '2026-11-12',
+      applyTo: '2026-11-27',
       examNote: 'রাজশাহী ছাড়াও ঢাকা, চট্টগ্রাম, খুলনা, সিলেট, ময়মনসিংহ ও রংপুর কেন্দ্রে পরীক্ষা হবে। তারিখ প্রাথমিকভাবে নির্ধারিত, সময় পরে জানানো হবে',
       units: [
-        { id: 'b', code: 'B', name: 'B Unit (বাণিজ্য)', sub: 'বিজনেস স্টাডিজ অনুষদ ও আইবিএ', date: '2027-01-08T10:00:00' },
-        { id: 'c', code: 'C', name: 'C Unit (বিজ্ঞান)', sub: 'বিজ্ঞান, কৃষি, প্রকৌশল, জীববিজ্ঞান, ভূ-বিজ্ঞান, ফিশারিজ ও ভেটেরিনারি অনুষদ', date: '2027-01-09T10:00:00' },
-        { id: 'a', code: 'A', name: 'A Unit (মানবিক)', sub: 'কলা, আইন, সামাজিক বিজ্ঞান, চারুকলা অনুষদ ও শিক্ষা ইনস্টিটিউট', date: '2027-01-16T10:00:00' }
+        { id: 'b', code: 'B', name: 'B Unit (বাণিজ্য)',  sub: 'বিজনেস স্টাডিজ অনুষদ ও আইবিএ',                                            date: '2027-01-08T10:00:00' },
+        { id: 'c', code: 'C', name: 'C Unit (বিজ্ঞান)',  sub: 'বিজ্ঞান, কৃষি, প্রকৌশল, জীববিজ্ঞান, ভূ-বিজ্ঞান, ফিশারিজ ও ভেটেরিনারি অনুষদ', date: '2027-01-09T10:00:00' },
+        { id: 'a', code: 'A', name: 'A Unit (মানবিক)',   sub: 'কলা, আইন, সামাজিক বিজ্ঞান, চারুকলা অনুষদ ও শিক্ষা ইনস্টিটিউট',              date: '2027-01-16T10:00:00' }
       ]
     },
     CU: {
       name: "চট্টগ্রাম বিশ্ববিদ্যালয় (CU)",
       logo: "assets/logo/cu.png",
-      theme: { dark: { headerFrom: '#1e1b4b', headerTo: '#0f172a', accent: '#6366f1', accentLight: '#818cf8', glow: 'rgba(99,102,241,0.16)' }, light: { headerFrom: '#4338ca', headerTo: '#312e81', accent: '#4f46e5', accentLight: '#6366f1', glow: 'rgba(79,70,229,0.1)' } },
-      applyFrom: '2026-11-15', applyTo: '2026-12-10',
+      theme: {
+        dark:  { headerFrom: '#1e1b4b', headerTo: '#0f172a', accent: '#6366f1', accentLight: '#818cf8', glow: 'rgba(99,102,241,0.16)' },
+        light: { headerFrom: '#4338ca', headerTo: '#312e81', accent: '#4f46e5', accentLight: '#6366f1', glow: 'rgba(79,70,229,0.1)' }
+      },
+      applyFrom: '2026-11-15',
+      applyTo: '2026-12-10',
       examNote: 'চট্টগ্রাম, ঢাকা ও রাজশাহীতে একই তারিখ ও সময়ে পরীক্ষা হবে। B1, B2 ও D1 উপ-ইউনিটের পরীক্ষা শুধুমাত্র চবি ক্যাম্পাসে',
       units: [
-        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান, জীববিজ্ঞান, ইঞ্জিনিয়ারিং ও মেরিন সায়েন্স অ্যান্ড ফিশারিজ অনুষদ', date: '2027-01-30T10:00:00' },
-        { id: 'c', code: 'C', name: 'C Unit (বাণিজ্য)', sub: 'ব্যবসায় প্রশাসন অনুষদ', date: '2027-01-29T10:00:00' },
-        { id: 'b1', code: 'B1', name: 'B1 উপ-ইউনিট (চারুকলা)', sub: 'নাট্যকলা, চারুকলা, সংগীত', date: '2027-02-03T10:00:00' },
-        { id: 'b2', code: 'B2', name: 'B2 উপ-ইউনিট (ভাষা)', sub: 'আরবি, ইসলামিক স্টাডিজ, পালি', date: '2027-02-04T10:00:00' },
-        { id: 'b', code: 'B', name: 'B Unit (কলা ও মানববিদ্যা)', sub: 'কলা ও মানববিদ্যা অনুষদভুক্ত ৯টি বিষয়', date: '2027-02-05T10:00:00' },
-        { id: 'd', code: 'D', name: 'D Unit (সমাজবিজ্ঞান)', sub: 'সমাজবিজ্ঞান, আইন, শিক্ষা অনুষদ, ভূগোল ও পরিবেশবিদ্যা, মনোবিজ্ঞান', date: '2027-02-06T10:00:00' },
-        { id: 'd1', code: 'D1', name: 'D1 উপ-ইউনিট (খেলাধুলা)', sub: 'ফিজিক্যাল এডুকেশন অ্যান্ড স্পোর্টস সায়েন্স', date: '2027-02-08T10:00:00' }
+        { id: 'a',  code: 'A',  name: 'A Unit (বিজ্ঞান)',        sub: 'বিজ্ঞান, জীববিজ্ঞান, ইঞ্জিনিয়ারিং ও মেরিন সায়েন্স অ্যান্ড ফিশারিজ অনুষদ', date: '2027-01-30T10:00:00' },
+        { id: 'c',  code: 'C',  name: 'C Unit (বাণিজ্য)',        sub: 'ব্যবসায় প্রশাসন অনুষদ',                                                   date: '2027-01-29T10:00:00' },
+        { id: 'b1', code: 'B1', name: 'B1 উপ-ইউনিট (চারুকলা)',   sub: 'নাট্যকলা, চারুকলা, সংগীত',                                                date: '2027-02-03T10:00:00' },
+        { id: 'b2', code: 'B2', name: 'B2 উপ-ইউনিট (ভাষা)',      sub: 'আরবি, ইসলামিক স্টাডিজ, পালি',                                             date: '2027-02-04T10:00:00' },
+        { id: 'b',  code: 'B',  name: 'B Unit (কলা ও মানববিদ্যা)', sub: 'কলা ও মানববিদ্যা অনুষদভুক্ত ৯টি বিষয়',                                  date: '2027-02-05T10:00:00' },
+        { id: 'd',  code: 'D',  name: 'D Unit (সমাজবিজ্ঞান)',    sub: 'সমাজবিজ্ঞান, আইন, শিক্ষা অনুষদ, ভূগোল ও পরিবেশবিদ্যা, মনোবিজ্ঞান',        date: '2027-02-06T10:00:00' },
+        { id: 'd1', code: 'D1', name: 'D1 উপ-ইউনিট (খেলাধুলা)',  sub: 'ফিজিক্যাল এডুকেশন অ্যান্ড স্পোর্টস সায়েন্স',                             date: '2027-02-08T10:00:00' }
       ]
     },
     MIST: {
-      name: "মিলিটারি ইনস্টিটিউট (MIST)",
+      name: "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি (MIST)",
       logo: "assets/logo/mist.png",
-      theme: { dark: { headerFrom: '#14210b', headerTo: '#0f172a', accent: '#65a30d', accentLight: '#84cc16', glow: 'rgba(101,163,13,0.16)' }, light: { headerFrom: '#3f6212', headerTo: '#1a2e05', accent: '#4d7c0f', accentLight: '#65a30d', glow: 'rgba(77,124,15,0.1)' } },
+      theme: {
+        dark:  { headerFrom: '#14210b', headerTo: '#0f172a', accent: '#65a30d', accentLight: '#84cc16', glow: 'rgba(101,163,13,0.16)' },
+        light: { headerFrom: '#3f6212', headerTo: '#1a2e05', accent: '#4d7c0f', accentLight: '#65a30d', glow: 'rgba(77,124,15,0.1)' }
+      },
       examNote: 'বিস্তারিত তথ্য শীঘ্রই জানানো হবে',
       units: [
-        { id: 'c', code: 'C', name: 'Unit C (বিজ্ঞান)', sub: 'বিজ্ঞান অনুষদ', date: '2026-12-18T10:00:00' },
-        { id: 'ab', code: 'AB', name: 'Unit A+B (ইঞ্জিনিয়ারিং)', sub: 'ইঞ্জিনিয়ারিং ও আর্কিটেকচার অনুষদ', date: '2026-12-19T10:00:00' }
+        { id: 'c',  code: 'C',  name: 'Unit C (বিজ্ঞান)',                  sub: 'বিজ্ঞান অনুষদ',                       date: '2026-12-18T10:00:00' },
+        { id: 'ab', code: 'AB', name: 'Unit A+B (ইঞ্জিনিয়ারিং ও আর্কিটেকচার)', sub: 'ইঞ্জিনিয়ারিং ও আর্কিটেকচার অনুষদ',    date: '2026-12-19T10:00:00' }
       ]
     }
   };
@@ -619,17 +677,36 @@
     localStorage.setItem('vc_appVersion', APP_VERSION);
   }
 
+  // ---------- URL helpers ----------
+  // Path segment picks the university (/DU, /JNU); hash picks the unit (#A, #IBA).
   function getUniFromPath() {
     const seg = location.pathname.split('/').filter(Boolean)[0];
     if (!seg) return null;
     const key = Object.keys(UNIVERSITIES).find(k => k.toLowerCase() === seg.toLowerCase());
     return key || null;
   }
-  function getUnitCodeFromHash() { return decodeURIComponent(location.hash.replace('#', '')) || null; }
 
+  function getUnitCodeFromHash() {
+    const h = decodeURIComponent(location.hash.replace('#', ''));
+    return h || null;
+  }
+
+  function updateURL() {
+    const uni = UNIVERSITIES[currentUni];
+    const unit = uni.units.find(u => u.id === currentUnitId);
+    const newUrl = '/' + currentUni + (unit ? '#' + unit.code : '');
+    const currentFull = location.pathname + location.hash;
+    if (currentFull !== newUrl) history.replaceState(null, '', newUrl);
+  }
+
+  // ---------- initial state ----------
   let currentUni = getUniFromPath();
   const uniCameFromUrl = !!currentUni;
-  if (!currentUni) { currentUni = localStorage.getItem('vc_uni'); if (!currentUni || !UNIVERSITIES[currentUni]) currentUni = 'DU'; }
+  if (!currentUni) {
+    currentUni = localStorage.getItem('vc_uni');
+    if (!currentUni || !UNIVERSITIES[currentUni]) currentUni = 'DU';
+  }
+
   let currentUnitId = null;
   if (uniCameFromUrl) {
     const hashCode = getUnitCodeFromHash();
@@ -642,120 +719,183 @@
   function getStatus(dateStr, now) {
     const d = new Date(dateStr), diff = d - now;
     if (diff < 0) return { status: 'passed' };
-    return { status: 'upcoming', days: Math.floor(diff / 86400000), hours: Math.floor((diff % 86400000) / 3600000), minutes: Math.floor((diff % 3600000) / 60000), seconds: Math.floor((diff % 60000) / 1000) };
+    return {
+      status: 'upcoming',
+      days: Math.floor(diff / 86400000),
+      hours: Math.floor((diff % 86400000) / 3600000),
+      minutes: Math.floor((diff % 3600000) / 60000),
+      seconds: Math.floor((diff % 60000) / 1000)
+    };
   }
+
   function monthsAndDays(now, target) {
     let months = (target.getFullYear() - now.getFullYear()) * 12 + (target.getMonth() - now.getMonth());
     let days = target.getDate() - now.getDate();
-    if (days < 0) { months -= 1; const prevMonthLastDay = new Date(target.getFullYear(), target.getMonth(), 0).getDate(); days += prevMonthLastDay; }
-    if (months < 0) months = 0; if (days < 0) days = 0;
-    return { months, days };
-  }
-
-  function updateURL() {
-    const uni = UNIVERSITIES[currentUni];
-    const unit = uni.units.find(u => u.id === currentUnitId);
-    const newUrl = '/' + currentUni + (unit ? '#' + unit.code : '');
-    const currentFull = location.pathname + location.hash;
-    if (currentFull !== newUrl) {
-      try {
-        history.replaceState(null, '', newUrl);
-      } catch (e) {
-        console.warn("History API navigation skipped due to environment restrictions (e.g., running from a local file or preview).");
-      }
+    if (days < 0) {
+      months -= 1;
+      const prevMonthLastDay = new Date(target.getFullYear(), target.getMonth(), 0).getDate();
+      days += prevMonthLastDay;
     }
+    if (months < 0) months = 0;
+    if (days < 0) days = 0;
+    return { months, days };
   }
 
   function populateUniSelect() {
     const sel = document.getElementById('uniSelect');
-    sel.innerHTML = Object.keys(UNIVERSITIES).map(key => `<option value="${key}" ${key === currentUni ? 'selected' : ''}>${UNIVERSITIES[key].name}</option>`).join('');
-    document.getElementById('uniLogo').src = UNIVERSITIES[currentUni].logo;
-    document.getElementById('uniLogo').alt = UNIVERSITIES[currentUni].name;
+    sel.innerHTML = Object.keys(UNIVERSITIES).map(key =>
+      `<option value="${key}" ${key === currentUni ? 'selected' : ''}>${UNIVERSITIES[key].name}</option>`
+    ).join('');
+
+    const logo = document.getElementById('uniLogo');
+    logo.src = UNIVERSITIES[currentUni].logo;
+    logo.alt = UNIVERSITIES[currentUni].name;
   }
 
   function applyTheme() {
     const mode = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
     const theme = UNIVERSITIES[currentUni].theme[mode];
     const root = document.documentElement.style;
-    root.setProperty('--header-from', theme.headerFrom); root.setProperty('--header-to', theme.headerTo);
-    root.setProperty('--accent-blue', theme.accent); root.setProperty('--accent-blue-light', theme.accentLight); root.setProperty('--accent-glow', theme.glow);
+    root.setProperty('--header-from', theme.headerFrom);
+    root.setProperty('--header-to', theme.headerTo);
+    root.setProperty('--accent-blue', theme.accent);
+    root.setProperty('--accent-blue-light', theme.accentLight);
+    root.setProperty('--accent-glow', theme.glow);
   }
 
   function ensureValidUnit() {
     const units = UNIVERSITIES[currentUni].units;
     if (!currentUnitId || !units.find(u => u.id === currentUnitId)) {
       const savedUnit = localStorage.getItem('vc_unit_' + currentUni);
-      if (savedUnit && units.find(u => u.id === savedUnit)) { currentUnitId = savedUnit; } 
-      else { const now = new Date(); const upcoming = units.find(u => getStatus(u.date, now).status === 'upcoming'); currentUnitId = upcoming ? upcoming.id : units[0].id; }
+      if (savedUnit && units.find(u => u.id === savedUnit)) {
+        currentUnitId = savedUnit;
+      } else {
+        const now = new Date();
+        const upcoming = units.find(u => getStatus(u.date, now).status === 'upcoming');
+        currentUnitId = upcoming ? upcoming.id : units[0].id;
+      }
     }
   }
 
   function renderAdmissionInfo() {
-    const uni = UNIVERSITIES[currentUni], wrap = document.getElementById('admissionInfo'), lines = [];
-    if (uni.applyFrom && uni.applyTo) lines.push(`📝 ভর্তি আবেদন: <b>${fmtDate(uni.applyFrom)} - ${fmtDate(uni.applyTo)}, ${fmtYear(uni.applyTo)}</b>`);
-    if (uni.classStart) lines.push(`🎓 ক্লাস শুরু: <b>${fmtDate(uni.classStart)}, ${fmtYear(uni.classStart)}</b>`);
-    if (uni.examNote) lines.push(`ℹ️ ${uni.examNote}`);
-    if (lines.length) { wrap.innerHTML = lines.map(l => `<span>${l}</span>`).join(''); wrap.classList.add('has-content'); } 
-    else { wrap.innerHTML = ''; wrap.classList.remove('has-content'); }
+    const uni = UNIVERSITIES[currentUni];
+    const wrap = document.getElementById('admissionInfo');
+    const lines = [];
+
+    if (uni.applyFrom && uni.applyTo) {
+      lines.push(`📝 ভর্তি আবেদন: <b>${fmtDate(uni.applyFrom)} - ${fmtDate(uni.applyTo)}, ${fmtYear(uni.applyTo)}</b>`);
+    }
+    if (uni.classStart) {
+      lines.push(`🎓 ক্লাস শুরু: <b>${fmtDate(uni.classStart)}, ${fmtYear(uni.classStart)}</b>`);
+    }
+    if (uni.examNote) {
+      lines.push(`ℹ️ ${uni.examNote}`);
+    }
+
+    if (lines.length) {
+      wrap.innerHTML = lines.map(l => `<span>${l}</span>`).join('');
+      wrap.classList.add('has-content');
+    } else {
+      wrap.innerHTML = '';
+      wrap.classList.remove('has-content');
+    }
   }
 
   function renderUnits() {
-    const units = UNIVERSITIES[currentUni].units, now = new Date();
+    const units = UNIVERSITIES[currentUni].units;
+    const now = new Date();
+
     document.getElementById('listTitle').innerHTML = `${SVG_BOOK} সকল ইউনিট (${toBnNum(units.length)})`;
+
     const grid = document.getElementById('unitsGrid');
     grid.innerHTML = units.map(u => {
-      const s = getStatus(u.date, now), passed = s.status === 'passed', selected = u.id === currentUnitId;
-      const badge = passed ? `<span class="badge badge-done">সম্পন্ন</span>` : `<span class="badge badge-upcoming">আসন্ন</span>`;
-      const checkIcon = selected ? `<span class="selected-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>` : '';
-      return `<div class="unit-card ${selected ? 'selected' : ''} ${passed ? 'passed' : ''}" data-id="${u.id}">
-          <div class="card-top"><div><div class="unit-name">${u.name}</div><div class="unit-sub">${u.sub}</div></div><div class="badge-row">${checkIcon}${badge}</div></div>
+      const s = getStatus(u.date, now);
+      const passed = s.status === 'passed';
+      const selected = u.id === currentUnitId;
+
+      const badge = passed
+        ? `<span class="badge badge-done">সম্পন্ন</span>`
+        : `<span class="badge badge-upcoming">আসন্ন</span>`;
+
+      const checkIcon = selected
+        ? `<span class="selected-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`
+        : '';
+
+      return `
+        <div class="unit-card ${selected ? 'selected' : ''} ${passed ? 'passed' : ''}" data-id="${u.id}">
+          <div class="card-top">
+            <div>
+              <div class="unit-name">${u.name}</div>
+              <div class="unit-sub">${u.sub}</div>
+            </div>
+            <div class="badge-row">${checkIcon}${badge}</div>
+          </div>
           <div class="date-pill">${SVG_CAL} ${fmtDate(u.date)}, ${fmtYear(u.date)} • ${fmtDay(u.date)}</div>
         </div>`;
     }).join('');
+
     grid.querySelectorAll('.unit-card').forEach(card => {
-      card.addEventListener('click', () => { currentUnitId = card.getAttribute('data-id'); saveState(); renderUnits(); renderHero(true); });
+      card.addEventListener('click', () => {
+        currentUnitId = card.getAttribute('data-id');
+        saveState();
+        renderUnits();
+        renderHero(true);
+      });
     });
   }
 
   function renderHero(force) {
-    const unit = UNIVERSITIES[currentUni].units.find(u => u.id === currentUnitId);
-    const nec = document.getElementById('nextUnitContent'), now = new Date(), s = getStatus(unit.date, now);
+    const units = UNIVERSITIES[currentUni].units;
+    const unit = units.find(u => u.id === currentUnitId);
+    const nec = document.getElementById('nextUnitContent');
+    const now = new Date();
+    const s = getStatus(unit.date, now);
 
     if (s.status === 'passed') {
-      nec.innerHTML = `<div class="finished-state"><div class="finished-icon">🎓</div><div class="finished-title">${unit.name} সম্পন্ন হয়েছে</div><div class="finished-sub">${UNIVERSITIES[currentUni].name}</div></div>`;
+      nec.innerHTML = `
+        <div class="finished-state">
+          <div class="finished-icon">🎓</div>
+          <div class="finished-title">${unit.name} সম্পন্ন হয়েছে</div>
+          <div class="finished-sub">${UNIVERSITIES[currentUni].name}</div>
+        </div>`;
       return;
     }
 
     const existingTitle = nec.querySelector('.exam-title');
     if (!force && existingTitle && existingTitle.textContent === unit.name) {
-      const spans = nec.querySelectorAll('.countdown-value'), vals = [s.days, s.hours, s.minutes, s.seconds];
-      vals.forEach((v, i) => { const t = toBnNum(String(v).padStart(2, '0')); if (spans[i] && spans[i].textContent !== t) spans[i].textContent = t; });
+      const spans = nec.querySelectorAll('.countdown-value');
+      const vals = [s.days, s.hours, s.minutes, s.seconds];
+      vals.forEach((v, i) => {
+        const t = toBnNum(String(v).padStart(2, '0'));
+        if (spans[i] && spans[i].textContent !== t) spans[i].textContent = t;
+      });
       return;
     }
 
     const md = monthsAndDays(now, new Date(unit.date));
-    const vals = [s.days, s.hours, s.minutes, s.seconds], labels = ['দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড'];
-    const boxes = vals.map((v, i) => `<div class="countdown-box"><span class="countdown-value">${toBnNum(String(v).padStart(2, '0'))}</span><span class="countdown-label">${labels[i]}</span></div>`).join('');
-    const approxText = md.months > 0 ? `<b>${toBnNum(md.months)}</b> মাস <b>${toBnNum(md.days)}</b> দিন বাকি` : `<b>${toBnNum(md.days)}</b> দিন বাকি`;
-    
-    
-    const isApp = new URLSearchParams(window.location.search).get('source') === 'app' || typeof AndroidApp !== 'undefined';
-    const apkUrl = window.APK_URL || '#';
-    
-    
-    const installBtnHtml = isApp ? '' : `
-      <a href="${apkUrl}" class="install-btn" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        App Install
-      </a>`;
+    const vals = [s.days, s.hours, s.minutes, s.seconds];
+    const labels = ['দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড'];
+    const boxes = vals.map((v, i) => `
+        <div class="countdown-box">
+          <span class="countdown-value">${toBnNum(String(v).padStart(2, '0'))}</span>
+          <span class="countdown-label">${labels[i]}</span>
+        </div>`).join('');
+
+    const approxText = md.months > 0
+      ? `<b>${toBnNum(md.months)}</b> মাস <b>${toBnNum(md.days)}</b> দিন বাকি`
+      : `<b>${toBnNum(md.days)}</b> দিন বাকি`;
+
+    const installHtml = (!insideNativeApp && installApkUrl)
+      ? `<a class="install-pill" href="${installApkUrl}" target="_blank" rel="noopener noreferrer">${SVG_DOWNLOAD} Install App</a>`
+      : '';
 
     nec.innerHTML = `
       <div class="exam-title">${unit.name}</div>
       <div class="exam-date-line">${SVG_CAL13} ${fmtDate(unit.date)}, ${fmtYear(unit.date)} • ${fmtDay(unit.date)}</div>
       <div class="countdown-grid">${boxes}</div>
-      <div class="hero-bottom-row">
+      <div class="bottom-row">
         <div class="approx-pill">${SVG_HOURGLASS} ${approxText}</div>
-        ${installBtnHtml}
+        ${installHtml}
       </div>`;
   }
 
@@ -763,26 +903,41 @@
     localStorage.setItem('vc_uni', currentUni);
     localStorage.setItem('vc_unit_' + currentUni, currentUnitId);
     updateURL();
-    
-    
-    if (typeof AndroidApp !== 'undefined') {
-        const uniName = UNIVERSITIES[currentUni].name;
-        const unit = UNIVERSITIES[currentUni].units.find(u => u.id === currentUnitId);
-        if (unit) {
-            // AndroidApp was injected via JavascriptInterface from our Java Wrapper
-            AndroidApp.updateWidgetData(currentUni, currentUnitId, uniName, unit.name, unit.date);
-        }
+    notifyNativeWidget();
+  }
+
+  // Tells the Android wrapper app (see android-app/MainActivity.java) which
+  // unit is currently selected, so the home-screen widget can show it too.
+  // No-op on the plain website, where window.Android doesn't exist.
+  function notifyNativeWidget() {
+    if (!insideNativeApp || !Android.saveSelection) return;
+    const uni = UNIVERSITIES[currentUni];
+    const unit = uni.units.find(u => u.id === currentUnitId);
+    if (!unit) return;
+    try {
+      Android.saveSelection(unit.name, unit.date, uni.name);
+    } catch (e) {
+      // ignore — bridge not ready yet
     }
   }
 
   function refresh(force) {
     ensureValidUnit();
-    if (force) { populateUniSelect(); applyTheme(); renderAdmissionInfo(); renderUnits(); }
+    if (force) {
+      populateUniSelect();
+      applyTheme();
+      renderAdmissionInfo();
+      renderUnits();
+    }
     renderHero(force !== false);
     saveState();
   }
 
-  document.getElementById('uniSelect').addEventListener('change', e => { currentUni = e.target.value; currentUnitId = null; refresh(true); });
+  document.getElementById('uniSelect').addEventListener('change', e => {
+    currentUni = e.target.value;
+    currentUnitId = null;
+    refresh(true);
+  });
 
   const darkToggle = document.getElementById('darkToggle');
   const savedTheme = localStorage.getItem('vc_theme') || 'dark';
