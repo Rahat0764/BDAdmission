@@ -912,15 +912,28 @@
   }
 
   // Tells the Android wrapper app (see android-app/MainActivity.java) which
-  // unit is currently selected, so the home-screen widget can show it too.
+  // unit is currently selected, so the home-screen widget can show a full
+  // matching card (logo, theme colors, countdown, note) — not just a name.
+  // Entirely data-driven: adding a new university on the website needs no
+  // native code changes, the same generic JSON shape covers every uni.
   // No-op on the plain website, where window.Android doesn't exist.
   function notifyNativeWidget() {
     if (!insideNativeApp || !Android.saveSelection) return;
     const uni = UNIVERSITIES[currentUni];
     const unit = uni.units.find(u => u.id === currentUnitId);
     if (!unit) return;
+    const mode = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const payload = {
+      uniName: uni.name,
+      uniLogo: new URL(uni.logo, location.href).href,
+      unitName: unit.name,
+      unitSub: unit.sub,
+      examDateIso: unit.date,
+      examNote: uni.examNote || '',
+      theme: uni.theme[mode]
+    };
     try {
-      Android.saveSelection(unit.name, unit.date, uni.name);
+      Android.saveSelection(JSON.stringify(payload));
     } catch (e) {
       // ignore — bridge not ready yet
     }
