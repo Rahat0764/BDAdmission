@@ -563,15 +563,8 @@
   const SVG_HOURGLASS = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>`;
   const SVG_DOWNLOAD = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
 
-  // True when the page is running inside the native Android wrapper app
-  // (MainActivity.java injects a "window.Android" JS interface — see the
-  // android-app/ folder). Used to hide the "Install App" pill once someone
-  // already has the app, and to push widget updates back to Android.
   const insideNativeApp = typeof Android !== 'undefined';
 
-  // Fetched once from /api/apk-url (reads the APK_URL env var on Vercel).
-  // Left null on the website until the fetch resolves, or forever if the
-  // env var isn't set / we're already inside the native app.
   let installApkUrl = null;
   if (!insideNativeApp) {
     fetch('/api/apk-url').then(function (r) { return r.ok ? r.json() : null; })
@@ -584,8 +577,6 @@
       .catch(function () {});
   }
 
-  // Each university carries its own crest (as a data URI, so the page needs no
-  // external image hosting) and a dark/light color theme derived from that crest.
   const UNIVERSITIES = {
     DU: {
       name: "ঢাকা বিশ্ববিদ্যালয় (DU)",
@@ -673,6 +664,18 @@
         { id: 'c',  code: 'C',  name: 'Unit C (বিজ্ঞান)',                  sub: 'বিজ্ঞান অনুষদ',                       date: '2026-12-18T10:00:00' },
         { id: 'ab', code: 'AB', name: 'Unit A+B (ইঞ্জিনিয়ারিং ও আর্কিটেকচার)', sub: 'ইঞ্জিনিয়ারিং ও আর্কিটেকচার অনুষদ',    date: '2026-12-19T10:00:00' }
       ]
+    },
+    KUET: {
+      name: "খুলনা প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় (KUET)",
+      logo: "assets/logo/kuet.png",
+      theme: {
+        dark:  { headerFrom: '#7c2d12', headerTo: '#0f172a', accent: '#f97316', accentLight: '#fb923c', glow: 'rgba(249,115,22,0.16)' },
+        light: { headerFrom: '#c2410c', headerTo: '#7c2d12', accent: '#ea580c', accentLight: '#f97316', glow: 'rgba(234,88,12,0.1)' }
+      },
+      examNote: 'খুলনা, ঢাকা ও রাজশাহী — এই তিন বিভাগীয় শহরে একই তারিখে MCQ পদ্ধতিতে পরীক্ষা হবে। আবেদন প্রক্রিয়া ও সময়সূচি পরবর্তী বিজ্ঞপ্তিতে জানানো হবে',
+      units: [
+        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা', sub: 'সকল বিভাগ (সম্মিলিত পরীক্ষা)', date: '2027-01-08T10:00:00' }
+      ]
     }
   };
 
@@ -681,9 +684,7 @@
     Object.keys(localStorage).forEach(k => { if (k.startsWith('vc_')) localStorage.removeItem(k); });
     localStorage.setItem('vc_appVersion', APP_VERSION);
   }
-
-  // ---------- URL helpers ----------
-  // Path segment picks the university (/DU, /JNU); hash picks the unit (#A, #IBA).
+  
   function getUniFromPath() {
     const seg = location.pathname.split('/').filter(Boolean)[0];
     if (!seg) return null;
@@ -704,7 +705,6 @@
     if (currentFull !== newUrl) history.replaceState(null, '', newUrl);
   }
 
-  // ---------- initial state ----------
   let currentUni = getUniFromPath();
   const uniCameFromUrl = !!currentUni;
   if (!currentUni) {
@@ -911,12 +911,6 @@
     notifyNativeWidget();
   }
 
-  // Tells the Android wrapper app (see android-app/MainActivity.java) which
-  // unit is currently selected, so the home-screen widget can show a full
-  // matching card (logo, theme colors, countdown, note) — not just a name.
-  // Entirely data-driven: adding a new university on the website needs no
-  // native code changes, the same generic JSON shape covers every uni.
-  // No-op on the plain website, where window.Android doesn't exist.
   function notifyNativeWidget() {
     if (!insideNativeApp || !Android.saveSelection) return;
     const uni = UNIVERSITIES[currentUni];
@@ -935,7 +929,7 @@
     try {
       Android.saveSelection(JSON.stringify(payload));
     } catch (e) {
-      // ignore — bridge not ready yet
+
     }
   }
 
