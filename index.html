@@ -602,7 +602,7 @@
     DU: {
       name: "ঢাকা বিশ্ববিদ্যালয় (DU)",
       logo: "assets/logo/du.png",
-      campusBg: "assets/background/du.jpg",
+      campusBg: "assets/background/du.webp",
       theme: {
         dark:  { headerFrom: '#2f1b72', headerTo: '#0f0a2e', accent: '#d4af37', accentLight: '#e8c565', glow: 'rgba(212,175,55,0.16)' },
         light: { headerFrom: '#4c2889', headerTo: '#2f1b72', accent: '#b8860b', accentLight: '#d4af37', glow: 'rgba(184,134,11,0.1)' }
@@ -622,7 +622,7 @@
     JNU: {
       name: "জগন্নাথ বিশ্ববিদ্যালয় (JNU)",
       logo: "assets/logo/jnu.png",
-      campusBg: "assets/background/jnu.jpg",
+      campusBg: "assets/background/jnu.webp",
       theme: {
         dark:  { headerFrom: '#5c1a1a', headerTo: '#1c0f0a', accent: '#e0752e', accentLight: '#f2994a', glow: 'rgba(224,117,46,0.18)' },
         light: { headerFrom: '#b91c1c', headerTo: '#7c2d12', accent: '#c2410c', accentLight: '#ea580c', glow: 'rgba(194,65,12,0.12)' }
@@ -642,7 +642,7 @@
     RU: {
       name: "রাজশাহী বিশ্ববিদ্যালয় (RU)",
       logo: "assets/logo/ru.png",
-      campusBg: "assets/background/ru.jpg",
+      campusBg: "assets/background/ru.webp",
       theme: {
         dark:  { headerFrom: '#1e3a8a', headerTo: '#0f172a', accent: '#facc15', accentLight: '#fde047', glow: 'rgba(250,204,21,0.16)' },
         light: { headerFrom: '#1d4ed8', headerTo: '#1e3a8a', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
@@ -659,7 +659,7 @@
     CU: {
       name: "চট্টগ্রাম বিশ্ববিদ্যালয় (CU)",
       logo: "assets/logo/cu.png",
-      campusBg: "assets/background/cu.jpg",
+      campusBg: "assets/background/cu.webp",
       theme: {
         dark:  { headerFrom: '#27272a', headerTo: '#0f172a', accent: '#94a3b8', accentLight: '#cbd5e1', glow: 'rgba(148,163,184,0.14)' },
         light: { headerFrom: '#3f3f46', headerTo: '#27272a', accent: '#64748b', accentLight: '#94a3b8', glow: 'rgba(100,116,139,0.1)' }
@@ -680,7 +680,7 @@
     MIST: {
       name: "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি (MIST)",
       logo: "assets/logo/mist.png",
-      campusBg: "assets/background/mist.jpg",
+      campusBg: "assets/background/mist.webp",
       theme: {
         dark:  { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#eab308', accentLight: '#fde047', glow: 'rgba(234,179,8,0.16)' },
         light: { headerFrom: '#15803d', headerTo: '#14532d', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
@@ -694,7 +694,7 @@
     KUET: {
       name: "খুলনা প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় (KUET)",
       logo: "assets/logo/kuet.png",
-      campusBg: "assets/background/kuet.jpg",
+      campusBg: "assets/background/kuet.webp",
       theme: {
         dark:  { headerFrom: '#047857', headerTo: '#0f172a', accent: '#d97706', accentLight: '#f59e0b', glow: 'rgba(217,119,6,0.16)' },
         light: { headerFrom: '#059669', headerTo: '#047857', accent: '#b45309', accentLight: '#d97706', glow: 'rgba(180,83,9,0.1)' }
@@ -707,7 +707,7 @@
     KU: {
       name: "খুলনা বিশ্ববিদ্যালয় (KU)",
       logo: "assets/logo/ku.png",
-      campusBg: "assets/background/ku.jpg",
+      campusBg: "assets/background/ku.webp",
       theme: {
         dark:  { headerFrom: '#0c4a6e', headerTo: '#0f172a', accent: '#f97316', accentLight: '#fb923c', glow: 'rgba(249,115,22,0.16)' },
         light: { headerFrom: '#0369a1', headerTo: '#0c4a6e', accent: '#ea580c', accentLight: '#f97316', glow: 'rgba(234,88,12,0.1)' }
@@ -1007,9 +1007,9 @@
       applyCampusBackground();
       renderAdmissionInfo();
       renderUnits();
+      saveState();
     }
     renderHero(force !== false);
-    saveState();
   }
 
   document.getElementById('uniSelect').addEventListener('change', e => {
