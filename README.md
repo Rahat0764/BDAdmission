@@ -50,7 +50,7 @@ To run this project locally:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Rahat0764/BDAdmission.git](https://github.com/Rahat0764/BDAdmission.git)
+   git clone https://github.com/Rahat0764/BDAdmission.git
    ```
 2. **Web Frontend:**
    Open `index.html` in your browser. *(Note: The Vercel API endpoint `/api/apk-url.js` will not fetch the download link locally without the Vercel CLI).*
