@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ভর্তি কাউন্টডাউন">
-<title>বিশ্ববিদ্যালয় ভর্তি পরীক্ষা</title>
+<title>বিশ্ববিদ্যালয় ভর্তি পরীক্ষা ২০২৬-২৭</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -27,6 +27,9 @@
     --header-from: #1e3a5f;
     --header-to: #0f172a;
     --scrollbar-thumb: #334155;
+    --modal-bg: rgba(15, 23, 42, 0.96);
+    --modal-card-bg: rgba(30, 41, 59, 0.9);
+    --dropdown-bg: rgba(15, 23, 42, 0.98);
   }
 
   [data-theme="light"] {
@@ -37,13 +40,16 @@
     --border-color: #dde5f4;
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-muted: #94a3b8;
+    --text-muted: #64748b;
     --accent-blue: #2563eb;
     --accent-blue-light: #3b82f6;
     --accent-glow: rgba(37, 99, 235, 0.1);
     --header-from: #1d4ed8;
     --header-to: #1e3a6e;
     --scrollbar-thumb: #bfdbfe;
+    --modal-bg: rgba(255, 255, 255, 0.97);
+    --modal-card-bg: #f8faff;
+    --dropdown-bg: rgba(255, 255, 255, 0.98);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -95,25 +101,25 @@
   }
 
   @media (min-width: 900px) {
-    .app-wrapper { max-width: 960px; height: min(720px, 90vh); flex-direction: row; }
-    .header-section { width: 42%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: flex-start; }
-    .content-col { width: 58%; display: flex; flex-direction: column; min-height: 0; }
-    .tabs-section, .list-section { flex: 1; min-height: 0; }
+    .app-wrapper { max-width: 960px; height: min(740px, 90vh); flex-direction: row; }
+    .header-section { width: 43%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: flex-start; }
+    .content-col { width: 57%; display: flex; flex-direction: column; min-height: 0; }
+    .list-section { flex: 1; min-height: 0; }
   }
 
   @media (min-width: 1300px) {
     body { padding: 32px; }
     .app-wrapper { max-width: 1360px; height: min(820px, 92vh); border-radius: 36px; }
-    .header-section { width: 40%; padding: 28px 32px 36px; }
-    .content-col { width: 60%; }
-    .exam-title { font-size: 32px; }
+    .header-section { width: 41%; padding: 26px 30px 32px; }
+    .content-col { width: 59%; }
+    .exam-title { font-size: 30px; }
     .countdown-value { font-size: 30px; }
-    .countdown-box { padding: 16px 8px 12px; }
+    .countdown-box { padding: 15px 8px 12px; }
     .list-section { padding: 24px 28px 28px; }
     #unitsGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; align-content: start; }
     .unit-card { margin-bottom: 0; }
-    .uni-logo { width: 52px; height: 52px; }
-    .styled-select { font-size: 17px; padding: 16px 42px 16px 18px; }
+    .uni-logo { width: 50px; height: 50px; }
+    .dropdown-trigger { font-size: 16.5px; padding: 15px 40px 15px 16px; }
   }
 
   @media (max-width: 480px) {
@@ -123,11 +129,20 @@
 
   .header-section {
     background: linear-gradient(160deg, var(--header-from), var(--header-to));
-    padding: 14px 16px 20px;
+    padding: 14px 16px 18px;
     position: relative;
     flex-shrink: 0;
     transition: background .4s ease;
+    overflow: visible;
+    z-index: 20;
+  }
+
+  .header-bg-clip {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .header-bg-image {
@@ -140,25 +155,23 @@
     opacity: 0;
     transition: opacity .5s ease;
     pointer-events: none;
-    z-index: 0;
   }
 
-  .header-section::after {
+  .header-bg-clip::after {
     content: '';
     position: absolute;
     inset: 0;
     background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
-    z-index: 1;
   }
 
   .top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     position: relative;
-    z-index: 2;
+    z-index: 5;
   }
 
   .dev-badge {
@@ -202,13 +215,14 @@
   [data-theme="light"] .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
   .toggle-label { font-size: 11px; font-weight: 600; color: #bfdbfe; white-space: nowrap; pointer-events: none; }
 
+  /* Searchable Custom Dropdown + Logo + Header Info Button */
   .uni-select-wrap {
     position: relative;
-    z-index: 2;
-    margin-bottom: 12px;
+    z-index: 30;
+    margin-bottom: 11px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
   }
 
   .uni-logo {
@@ -222,27 +236,51 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: opacity .2s ease, width .3s ease, height .3s ease;
+    display: none;
   }
 
-  .select-inner { position: relative; flex: 1; min-width: 0; }
+  .select-inner {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
 
-  .styled-select {
+  .dropdown-trigger {
     width: 100%;
-    appearance: none;
-    background: rgba(0, 0, 0, 0.22);
+    background: rgba(0, 0, 0, 0.24);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     color: #fff;
-    font-family: 'Noto Sans Bengali', sans-serif;
-    font-size: 15px;
+    font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+    font-size: 14.5px;
     font-weight: 700;
     border-radius: 14px;
-    padding: 13px 38px 13px 14px;
+    padding: 12px 36px 12px 14px;
+    text-align: left;
     outline: none;
     cursor: pointer;
-    transition: border-color .2s, background .2s, font-size .3s ease, padding .3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color .2s, background .2s, transform .15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .styled-select:focus { border-color: var(--accent-blue-light); }
+  .dropdown-trigger:hover {
+    background: rgba(0, 0, 0, 0.34);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .dropdown-trigger.open {
+    border-color: var(--accent-blue-light);
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .trigger-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+  }
 
   .select-arrow {
     position: absolute;
@@ -251,34 +289,234 @@
     transform: translateY(-50%);
     color: #93c5fd;
     pointer-events: none;
+    transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+  }
+  .dropdown-trigger.open + .select-arrow {
+    transform: translateY(-50%) rotate(180deg);
   }
 
-  .admission-info {
+  /* Custom Searchable Dropdown Menu */
+  .uni-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--dropdown-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top center;
+    transition: opacity .22s ease, transform .22s cubic-bezier(.34, 1.56, .64, 1), visibility .22s;
+  }
+  .uni-dropdown-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  .dropdown-search-box {
+    padding: 10px 10px 8px;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .dropdown-search-icon {
+    position: absolute;
+    left: 20px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .dropdown-search-input {
+    width: 100%;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+    padding: 9px 32px 9px 32px;
+    font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .dropdown-search-input:focus {
+    border-color: var(--accent-blue-light);
+  }
+  .dropdown-search-input::placeholder {
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .dropdown-search-clear {
+    position: absolute;
+    right: 18px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 4px;
+    display: none;
+  }
+  .dropdown-search-clear.visible { display: block; }
+
+  .dropdown-options-list {
+    max-height: 270px;
+    overflow-y: auto;
+    padding: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+  .dropdown-options-list::-webkit-scrollbar { width: 4px; }
+  .dropdown-options-list::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 8px; }
+
+  .dropdown-option {
+    padding: 9px 11px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: background .15s ease;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  .dropdown-option:hover, .dropdown-option.focused {
+    background: var(--bg-card-hover);
+  }
+  .dropdown-option.active {
+    background: var(--accent-glow);
+    color: var(--accent-blue-light);
+    font-weight: 700;
+  }
+  .dropdown-opt-code {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 12px;
+    background: rgba(148, 163, 184, 0.14);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .dropdown-option.active .dropdown-opt-code {
+    background: var(--accent-blue);
+    color: #fff;
+  }
+  .dropdown-empty {
+    padding: 18px 12px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  /* Header i button */
+  .info-trigger-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s, transform .18s ease, border-color .2s;
+  }
+  .info-trigger-btn:hover {
+    background: rgba(255, 255, 255, 0.24);
+    border-color: var(--accent-blue-light);
+    transform: translateY(-1px) scale(1.04);
+  }
+  .info-trigger-btn:active { transform: scale(.94); }
+
+  /* Compact Separate Application Deadline Countdown Bar in Header */
+  .app-deadline-bar {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 12px;
+    background: rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    padding: 7px 11px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     font-size: 11.5px;
     color: #dbeafe;
-    margin-bottom: 14px;
+    animation: slideUp .35s ease both;
+  }
+  .app-deadline-bar.visible { display: flex; }
+  .deadline-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+  .deadline-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px #34d399;
+    flex-shrink: 0;
+  }
+  .deadline-dot.upcoming { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+  .deadline-dot.closed { background: #94a3b8; box-shadow: none; }
+  .deadline-timer-mono {
+    font-family: 'JetBrains Mono', 'Noto Sans Bengali', monospace;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 2px 7px;
+    border-radius: 7px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .deadline-apply-mini {
+    color: #fff;
+    background: var(--accent-blue);
+    text-decoration: none;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity .2s, transform .15s;
+  }
+  .deadline-apply-mini:hover { opacity: .92; transform: scale(1.03); }
+
+  .exam-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     position: relative;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 9px 12px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
+    margin-bottom: 4px;
   }
-  .admission-info.has-content { display: flex; }
-  .admission-info b { color: #fff; }
 
   .exam-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 22px;
+    font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+    font-size: 21px;
     font-weight: 800;
     color: #fff;
-    line-height: 1.2;
-    margin-bottom: 4px;
-    position: relative;
-    z-index: 2;
+    line-height: 1.25;
     animation: slideUp .4s ease both;
     transition: font-size .3s ease;
   }
@@ -289,6 +527,7 @@
     margin-bottom: 12px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 6px;
     position: relative;
     z-index: 2;
@@ -410,7 +649,7 @@
   .finished-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
   .finished-sub { font-size: 12px; color: #93c5fd; }
 
-  .content-col { display: flex; flex-direction: column; min-height: 0; }
+  .content-col { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 
   .list-section {
     flex: 1;
@@ -477,7 +716,7 @@
     transition: width .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
   }
   .unit-card.selected::before { width: 4px; opacity: 1; }
-  .unit-card.passed { opacity: .5; }
+  .unit-card.passed { opacity: .55; }
 
   .card-top {
     display: flex;
@@ -511,6 +750,28 @@
 
   .badge-row { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
+  .unit-info-btn {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: rgba(148, 163, 184, 0.1);
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s, color .2s, border-color .2s, transform .15s;
+  }
+  .unit-info-btn:hover {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+    transform: scale(1.1);
+  }
+  .unit-info-btn:active { transform: scale(.93); }
+
   .selected-check {
     display: inline-flex;
     align-items: center;
@@ -530,13 +791,249 @@
     to   { transform: scale(1); opacity: 1; }
   }
 
-  .date-pill { font-size: 11.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
+  .date-pill {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .date-pill-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .fee-mini-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--accent-blue-light);
+    background: var(--accent-glow);
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  /* Floating Info Modal (`i` icon click) */
+  .info-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.65);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .info-modal-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .info-modal-card {
+    width: 100%;
+    max-width: 500px;
+    max-height: 85dvh;
+    background: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(18px) scale(0.96);
+    transition: transform .28s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .info-modal-backdrop.open .info-modal-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    background: linear-gradient(145deg, var(--header-from), var(--header-to));
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .modal-uni-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .modal-unit-subtitle {
+    font-size: 12px;
+    color: #bfdbfe;
+    margin-top: 3px;
+    font-weight: 600;
+  }
+  .modal-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background .2s, transform .15s;
+  }
+  .modal-close-btn:hover { background: rgba(0, 0, 0, 0.45); transform: scale(1.06); }
+
+  .modal-body {
+    padding: 16px 18px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+  .modal-body::-webkit-scrollbar { width: 4px; }
+  .modal-body::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 8px; }
+
+  .modal-section-box {
+    background: var(--modal-card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 12px 14px;
+  }
+  .modal-sec-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-blue-light);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .modal-kv {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 9px 11px;
+  }
+  .modal-kv.full {
+    grid-column: 1 / -1;
+  }
+  .modal-k {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+    display: block;
+  }
+  .modal-v {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .modal-deadline-live {
+    margin-top: 8px;
+    padding: 8px 11px;
+    border-radius: 11px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .modal-deadline-digits {
+    font-family: 'JetBrains Mono', 'Noto Sans Bengali', monospace;
+    font-weight: 700;
+    color: var(--accent-blue-light);
+  }
+
+  .modal-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .modal-action-link {
+    flex: 1;
+    min-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform .15s, opacity .2s;
+  }
+  .modal-action-link:hover { transform: translateY(-1px); opacity: .94; }
+  .modal-action-primary {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-light));
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+  }
+  .modal-action-secondary {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .modal-unit-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .modal-unit-tab {
+    padding: 5px 11px;
+    border-radius: 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+    transition: all .18s ease;
+  }
+  .modal-unit-tab.active {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+  }
+
+  .modal-note-text {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
 </style>
 </head>
 <body>
 <div class="app-wrapper">
   <div class="header-section">
-    <div class="header-bg-image" id="headerBgImage"></div>
+    <div class="header-bg-clip">
+      <div class="header-bg-image" id="headerBgImage"></div>
+    </div>
     <div class="top-bar">
       <a href="https://linkedin.com/in/RahatAhmedX" target="_blank" rel="noopener noreferrer" class="dev-badge">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -552,14 +1049,29 @@
     </div>
 
     <div class="uni-select-wrap">
-      <img class="uni-logo" id="uniLogo" alt="">
-      <div class="select-inner">
-        <select class="styled-select" id="uniSelect"></select>
+      <img class="uni-logo" id="uniLogo" alt="" onload="this.style.display='block'" onerror="this.style.display='none'">
+      <div class="select-inner" id="customDropdownWrap">
+        <button type="button" class="dropdown-trigger" id="uniDropdownBtn" aria-expanded="false">
+          <span class="trigger-text" id="uniTriggerText">ঢাকা বিশ্ববিদ্যালয় (DU)</span>
+        </button>
         <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+
+        <div class="uni-dropdown-menu" id="uniDropdownMenu">
+          <div class="dropdown-search-box">
+            <svg class="dropdown-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" class="dropdown-search-input" id="uniSearchInput" placeholder="খুঁজুন: DU, Dhaka University, ঢাকা ইউনিভার্সিটি..." autocomplete="off">
+            <button type="button" class="dropdown-search-clear" id="uniSearchClear" aria-label="Clear search">&times;</button>
+          </div>
+          <div class="dropdown-options-list" id="uniOptionsList"></div>
+        </div>
       </div>
+
+      <button type="button" class="info-trigger-btn" id="headerInfoBtn" title="বিস্তারিত ভর্তি তথ্য ও আবেদন লিংক" aria-label="বিস্তারিত তথ্য">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </button>
     </div>
 
-    <div class="admission-info" id="admissionInfo"></div>
+    <div class="app-deadline-bar" id="appDeadlineBar"></div>
 
     <div id="nextUnitContent"></div>
   </div>
@@ -569,6 +1081,22 @@
       <div class="list-title" id="listTitle"></div>
       <div id="unitsGrid"></div>
     </div>
+  </div>
+</div>
+
+<!-- Floating Info Modal (`i` icon click) -->
+<div class="info-modal-backdrop" id="infoModalBackdrop" role="dialog" aria-modal="true">
+  <div class="info-modal-card">
+    <div class="modal-header">
+      <div>
+        <div class="modal-uni-title" id="modalUniTitle"></div>
+        <div class="modal-unit-subtitle" id="modalUnitSub"></div>
+      </div>
+      <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modalBodyContent"></div>
   </div>
 </div>
 
@@ -583,6 +1111,8 @@
   const SVG_BOOK = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
   const SVG_HOURGLASS = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>`;
   const SVG_DOWNLOAD = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+  const SVG_INFO = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
+  const SVG_EXT = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 
   const insideNativeApp = typeof Android !== 'undefined';
 
@@ -601,198 +1131,414 @@
   const UNIVERSITIES = {
     DU: {
       name: "ঢাকা বিশ্ববিদ্যালয় (DU)",
+      searchTerms: "ঢাকা বিশ্ববিদ্যালয় ঢাকা ইউনিভার্সিটি ঢাবি Dhaka University University of Dhaka DU",
       logo: "assets/logo/du.png",
       campusBg: "assets/background/du.webp",
       theme: {
         dark:  { headerFrom: '#2f1b72', headerTo: '#0f0a2e', accent: '#d4af37', accentLight: '#e8c565', glow: 'rgba(212,175,55,0.16)' },
         light: { headerFrom: '#4c2889', headerTo: '#2f1b72', accent: '#b8860b', accentLight: '#d4af37', glow: 'rgba(184,134,11,0.1)' }
       },
-      applyFrom: '2026-11-11',
-      applyTo: '2026-11-25',
+      applyFrom: '2026-11-11T12:00:00',
+      applyTo: '2026-11-25T23:59:00',
+      applyWindowText: '১১ নভেম্বর ২০২৬ (দুপুর ১২:০০টা) থেকে ২৫ নভেম্বর ২০২৬ (রাত ১১:৫৯টা)',
+      applyUrl: 'https://admission.eis.du.ac.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/ye7sxu2cx5',
       classStart: '2027-03-28',
-      examNote: 'ভর্তি পরীক্ষা মোট ১২০ নম্বরে মূল্যায়ন করা হবে (পরীক্ষা ১০০ + SSC-HSC ফলাফল ২০)',
+      examNote: 'ভর্তি পরীক্ষা মোট ১২০ নম্বরে মূল্যায়ন করা হবে (পরীক্ষা ১০০ + SSC ও HSC জিপিএ ২০)। বিজ্ঞান, কলা ও ব্যবসায় শিক্ষা ইউনিটের পরীক্ষা ঢাকাসহ ৮টি বিভাগীয় শহরে অনুষ্ঠিত হবে।',
       units: [
-        { id: 'iba', code: 'IBA', name: 'IBA Unit',                                   sub: 'ব্যবসায় প্রশাসন ইনস্টিটিউট',              date: '2026-12-05T10:00:00' },
-        { id: 'a',   code: 'A',   name: 'A Unit (বিজ্ঞান)',                            sub: 'বিজ্ঞান অনুষদ',                          date: '2026-12-12T11:00:00' },
-        { id: 'b',   code: 'B',   name: 'B Unit (কলা, আইন ও সামাজিক বিজ্ঞান)',          sub: 'কলা, আইন ও সামাজিক বিজ্ঞান অনুষদ',        date: '2026-12-19T11:00:00' },
-        { id: 'cha', code: 'CHA', name: 'CHA Unit (চারুকলা)',                          sub: 'চারুকলা অনুষদ',                          date: '2026-12-22T11:00:00' },
-        { id: 'c',   code: 'C',   name: 'C Unit (ব্যবসায় শিক্ষা)',                     sub: 'ব্যবসায় শিক্ষা অনুষদ',                    date: '2026-12-26T11:00:00' }
-      ]
-    },
-    JNU: {
-      name: "জগন্নাথ বিশ্ববিদ্যালয় (JNU)",
-      logo: "assets/logo/jnu.png",
-      campusBg: "assets/background/jnu.webp",
-      theme: {
-        dark:  { headerFrom: '#5c1a1a', headerTo: '#1c0f0a', accent: '#e0752e', accentLight: '#f2994a', glow: 'rgba(224,117,46,0.18)' },
-        light: { headerFrom: '#b91c1c', headerTo: '#7c2d12', accent: '#c2410c', accentLight: '#ea580c', glow: 'rgba(194,65,12,0.12)' }
-      },
-      applyFrom: '2026-11-15',
-      applyTo: '2026-12-10',
-      classStart: '2027-04-04',
-      examNote: 'সকল ইউনিটের পরীক্ষা ঢাকায়, MCQ পদ্ধতিতে অনুষ্ঠিত হবে',
-      units: [
-        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)',            sub: 'বিজ্ঞান অনুষদ',            date: '2027-01-01T10:00:00' },
-        { id: 'e', code: 'E', name: 'E Unit (চারুকলা)',            sub: 'চারুকলা অনুষদ',            date: '2027-01-08T10:00:00' },
-        { id: 'b', code: 'B', name: 'B Unit (কলা ও আইন অনুষদ)',    sub: 'কলা ও আইন অনুষদ',          date: '2027-01-15T10:00:00' },
-        { id: 'c', code: 'C', name: 'C Unit (বাণিজ্য)',            sub: 'বাণিজ্য অনুষদ',            date: '2027-01-22T10:00:00' },
-        { id: 'd', code: 'D', name: 'D Unit (সামাজিক বিজ্ঞান)',    sub: 'সামাজিক বিজ্ঞান অনুষদ',    date: '2027-01-23T10:00:00' }
+        { id: 'iba', code: 'IBA', name: 'IBA Unit', sub: 'ব্যবসায় প্রশাসন ইনস্টিটিউট', date: '2026-12-05T10:00:00', fee: '৳১,৫০০', time: 'সকাল ১০:০০টা - দুপুর ১২:০০টা', method: '৭০ নম্বর MCQ (৯০ মিনিট) + ৩০ নম্বর বর্ণনামূলক (৩০ মিনিট); কেন্দ্র: শুধু ঢাকা' },
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান, জীববিজ্ঞান, ফার্মেসি, আর্থ অ্যান্ড এনভায়রনমেন্টাল সায়েন্সেস ও ইঞ্জিনিয়ারিং অনুষদ', date: '2026-12-12T11:00:00', fee: '৳১,২০০', time: 'সকাল ১১:০০টা - দুপুর ১২:৩০টা', method: '৬০ নম্বর MCQ (৪৫ মিনিট) + ৪০ নম্বর লিখিত (৪৫ মিনিট); কেন্দ্র: ৮টি বিভাগীয় শহর' },
+        { id: 'b', code: 'B', name: 'B Unit (কলা, আইন ও সামাজিক বিজ্ঞান)', sub: 'কলা, আইন ও সামাজিক বিজ্ঞান অনুষদ', date: '2026-12-19T11:00:00', fee: '৳১,২০০', time: 'সকাল ১১:০০টা - দুপুর ১২:৩০টা', method: '৬০ নম্বর MCQ (৪৫ মিনিট) + ৪০ নম্বর লিখিত (৪৫ মিনিট); কেন্দ্র: ৮টি বিভাগীয় শহর' },
+        { id: 'cha', code: 'CHA', name: 'CHA Unit (চারুকলা)', sub: 'চারুকলা অনুষদ', date: '2026-12-22T11:00:00', fee: '৳১,৪০০', time: 'সকাল ১১:০০টা - দুপুর ১২:৩০টা', method: '৪০ নম্বর সাধারণ জ্ঞান MCQ (৩০ মিনিট) + ৬০ নম্বর অঙ্কন (৬০ মিনিট); কেন্দ্র: শুধু ঢাকা' },
+        { id: 'c', code: 'C', name: 'C Unit (ব্যবসায় শিক্ষা)', sub: 'বিজনেস স্টাডিজ অনুষদ', date: '2026-12-26T11:00:00', fee: '৳১,২০০', time: 'সকাল ১১:০০টা - দুপুর ১২:৩০টা', method: '৬০ নম্বর MCQ (৪৫ মিনিট) + ৪০ নম্বর লিখিত (৪৫ মিনিট); কেন্দ্র: ৮টি বিভাগীয় শহর' }
       ]
     },
     RU: {
       name: "রাজশাহী বিশ্ববিদ্যালয় (RU)",
+      searchTerms: "রাজশাহী বিশ্ববিদ্যালয় রাজশাহী ইউনিভার্সিটি রাবি Rajshahi University University of Rajshahi RU",
       logo: "assets/logo/ru.png",
       campusBg: "assets/background/ru.webp",
       theme: {
         dark:  { headerFrom: '#1e3a8a', headerTo: '#0f172a', accent: '#facc15', accentLight: '#fde047', glow: 'rgba(250,204,21,0.16)' },
         light: { headerFrom: '#1d4ed8', headerTo: '#1e3a8a', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
       },
-      applyFrom: '2026-11-12',
-      applyTo: '2026-11-27',
-      examNote: 'রাজশাহী ছাড়াও ঢাকা, চট্টগ্রাম, খুলনা, সিলেট, ময়মনসিংহ ও রংপুর কেন্দ্রে পরীক্ষা হবে। তারিখ প্রাথমিকভাবে নির্ধারিত, সময় পরে জানানো হবে',
+      applyFrom: '2026-11-15T12:00:00',
+      applyTo: '2026-11-30T23:59:00',
+      applyWindowText: '১৫ নভেম্বর ২০২৬ (দুপুর ১২:০০টা) থেকে ৩০ নভেম্বর ২০২৬ (রাত ১১:৫৯টা)',
+      applyUrl: 'https://admission.ru.ac.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/syafosa3pv',
+      examNote: '১২ নভেম্বরের নতুন বিজ্ঞপ্তি অনুযায়ী পরীক্ষা জানুয়ারির পরিবর্তে ফেব্রুয়ারিতে অনুষ্ঠিত হবে। রাজশাহী, ঢাকা, চট্টগ্রাম, খুলনা, রংপুর, সিলেট, ময়মনসিংহ ও বরিশাল কেন্দ্রে পরীক্ষা হবে।',
       units: [
-        { id: 'b', code: 'B', name: 'B Unit (বাণিজ্য)',  sub: 'বিজনেস স্টাডিজ অনুষদ ও আইবিএ',                                            date: '2027-01-08T10:00:00' },
-        { id: 'c', code: 'C', name: 'C Unit (বিজ্ঞান)',  sub: 'বিজ্ঞান, কৃষি, প্রকৌশল, জীববিজ্ঞান, ভূ-বিজ্ঞান, ফিশারিজ ও ভেটেরিনারি অনুষদ', date: '2027-01-09T10:00:00' },
-        { id: 'a', code: 'A', name: 'A Unit (মানবিক)',   sub: 'কলা, আইন, সামাজিক বিজ্ঞান, চারুকলা অনুষদ ও শিক্ষা ইনস্টিটিউট',              date: '2027-01-16T10:00:00' }
+        { id: 'b', code: 'B', name: 'B Unit (বাণিজ্য)', sub: 'বিজনেস স্টাডিজ অনুষদ ও আইবিএ', date: '2027-02-12T11:00:00', fee: '৳১,১০০', time: 'বেলা ১১:০০টা - ১২:০০টা / বিকেল ৩:০০টা - ৪:০০টা', method: '১০০ নম্বরের MCQ (৮০টি প্রশ্ন, সময় ১ ঘণ্টা, প্রতি ৪টি ভুল উত্তরে ১ নম্বর কাটা)' },
+        { id: 'c', code: 'C', name: 'C Unit (বিজ্ঞান)', sub: 'বিজ্ঞান, কৃষি, প্রকৌশল, জীববিজ্ঞান, ভূ-বিজ্ঞান, ফিশারিজ ও ভেটেরিনারি অনুষদ', date: '2027-02-13T11:00:00', fee: '৳১,৩২০', time: 'বেলা ১১:০০টা - ১২:০০টা / দুপুর ২:০০টা - ৩:০০টা', method: '১০০ নম্বরের MCQ (৮০টি প্রশ্ন, সময় ১ ঘণ্টা, প্রতি ৪টি ভুল উত্তরে ১ নম্বর কাটা)' },
+        { id: 'a', code: 'A', name: 'A Unit (মানবিক)', sub: 'কলা, আইন, সামাজিক বিজ্ঞান, চারুকলা অনুষদ ও শিক্ষা ইনস্টিটিউট', date: '2027-02-20T11:00:00', fee: '৳১,৩২০', time: 'বেলা ১১:০০টা - ১২:০০টা / দুপুর ২:০০টা - ৩:০০টা', method: '১০০ নম্বরের MCQ (৮০টি প্রশ্ন, সময় ১ ঘণ্টা, প্রতি ৪টি ভুল উত্তরে ১ নম্বর কাটা)' }
       ]
     },
-    CU: {
-      name: "চট্টগ্রাম বিশ্ববিদ্যালয় (CU)",
-      logo: "assets/logo/cu.png",
-      campusBg: "assets/background/cu.webp",
+    JNU: {
+      name: "জগন্নাথ বিশ্ববিদ্যালয় (JnU)",
+      searchTerms: "জগন্নাথ বিশ্ববিদ্যালয় জগন্নাথ ইউনিভার্সিটি জবি Jagannath University JnU JNU",
+      logo: "assets/logo/jnu.png",
+      campusBg: "assets/background/jnu.webp",
       theme: {
-        dark:  { headerFrom: '#27272a', headerTo: '#0f172a', accent: '#94a3b8', accentLight: '#cbd5e1', glow: 'rgba(148,163,184,0.14)' },
-        light: { headerFrom: '#3f3f46', headerTo: '#27272a', accent: '#64748b', accentLight: '#94a3b8', glow: 'rgba(100,116,139,0.1)' }
+        dark:  { headerFrom: '#5c1a1a', headerTo: '#1c0f0a', accent: '#e0752e', accentLight: '#f2994a', glow: 'rgba(224,117,46,0.18)' },
+        light: { headerFrom: '#b91c1c', headerTo: '#7c2d12', accent: '#c2410c', accentLight: '#ea580c', glow: 'rgba(194,65,12,0.12)' }
       },
-      applyFrom: '2026-11-15',
-      applyTo: '2026-12-10',
-      examNote: 'চট্টগ্রাম, ঢাকা ও রাজশাহীতে একই তারিখ ও সময়ে পরীক্ষা হবে। B1, B2 ও D1 উপ-ইউনিটের পরীক্ষা শুধুমাত্র চবি ক্যাম্পাসে',
+      applyFrom: '2026-11-25T12:00:00',
+      applyTo: '2026-12-10T23:59:00',
+      applyWindowText: '২৫ নভেম্বর ২০২৬ (দুপুর ১২:০০টা) থেকে ১০ ডিসেম্বর ২০২৬ (রাত ১১:৫৯টা)',
+      applyUrl: 'https://admission.jnu.ac.bd/',
+      sourceUrl: 'https://thedhakadiary.com/news/30533',
+      classStart: '2027-04-04',
+      examNote: '১১ নভেম্বর ২০২৬ তারিখের সংশোধিত বিজ্ঞপ্তি অনুযায়ী আবেদন ২৫ নভেম্বর শুরু হবে। সকল ইউনিটের পরীক্ষা ঢাকায় অনুষ্ঠিত হবে।',
       units: [
-        { id: 'a',  code: 'A',  name: 'A Unit (বিজ্ঞান)',        sub: 'বিজ্ঞান, জীববিজ্ঞান, ইঞ্জিনিয়ারিং ও মেরিন সায়েন্স অ্যান্ড ফিশারিজ অনুষদ', date: '2027-01-30T10:00:00' },
-        { id: 'c',  code: 'C',  name: 'C Unit (বাণিজ্য)',        sub: 'ব্যবসায় প্রশাসন অনুষদ',                                                   date: '2027-01-29T10:00:00' },
-        { id: 'b1', code: 'B1', name: 'B1 উপ-ইউনিট (চারুকলা)',   sub: 'নাট্যকলা, চারুকলা, সংগীত',                                                date: '2027-02-03T10:00:00' },
-        { id: 'b2', code: 'B2', name: 'B2 উপ-ইউনিট (ভাষা)',      sub: 'আরবি, ইসলামিক স্টাডিজ, পালি',                                             date: '2027-02-04T10:00:00' },
-        { id: 'b',  code: 'B',  name: 'B Unit (কলা ও মানববিদ্যা)', sub: 'কলা ও মানববিদ্যা অনুষদভুক্ত ৯টি বিষয়',                                  date: '2027-02-05T10:00:00' },
-        { id: 'd',  code: 'D',  name: 'D Unit (সমাজবিজ্ঞান)',    sub: 'সমাজবিজ্ঞান, আইন, শিক্ষা অনুষদ, ভূগোল ও পরিবেশবিদ্যা, মনোবিজ্ঞান',        date: '2027-02-06T10:00:00' },
-        { id: 'd1', code: 'D1', name: 'D1 উপ-ইউনিট (খেলাধুলা)',  sub: 'ফিজিক্যাল এডুকেশন অ্যান্ড স্পোর্টস সায়েন্স',                             date: '2027-02-08T10:00:00' }
-      ]
-    },
-    MIST: {
-      name: "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি (MIST)",
-      logo: "assets/logo/mist.png",
-      campusBg: "assets/background/mist.webp",
-      theme: {
-        dark:  { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#eab308', accentLight: '#fde047', glow: 'rgba(234,179,8,0.16)' },
-        light: { headerFrom: '#15803d', headerTo: '#14532d', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
-      },
-      examNote: 'বিস্তারিত তথ্য শীঘ্রই জানানো হবে',
-      units: [
-        { id: 'c',  code: 'C',  name: 'Unit C (বিজ্ঞান)',                  sub: 'বিজ্ঞান অনুষদ',                       date: '2026-12-18T10:00:00' },
-        { id: 'ab', code: 'AB', name: 'Unit A+B (ইঞ্জিনিয়ারিং ও আর্কিটেকচার)', sub: 'ইঞ্জিনিয়ারিং ও আর্কিটেকচার অনুষদ',    date: '2026-12-19T10:00:00' }
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান ও লাইফ অ্যান্ড আর্থ সায়েন্স)', sub: 'বিজ্ঞান এবং লাইফ অ্যান্ড আর্থ সায়েন্স অনুষদ', date: '2027-01-01T10:00:00', fee: '৳১,২০০', time: 'সকাল ১০:০০টা - ১১:০০টা', method: 'MCQ পদ্ধতি (১ ঘণ্টা); কেন্দ্র: ঢাকা' },
+        { id: 'e', code: 'E', name: 'E Unit (চারুকলা)', sub: 'চারুকলা অনুষদ', date: '2027-01-08T10:00:00', fee: '৳১,৫০০', time: 'সকাল ১০:০০টা - ১১:৩০টা', method: 'MCQ ও ব্যবহারিক/অঙ্কন পরীক্ষা (১ ঘণ্টা ৩০ মিনিট); কেন্দ্র: ঢাকা' },
+        { id: 'b', code: 'B', name: 'B Unit (কলা ও আইন অনুষদ)', sub: 'কলা ও আইন অনুষদ', date: '2027-01-15T10:00:00', fee: '৳১,২০০', time: 'সকাল ১০:০০টা - ১১:০০টা', method: 'MCQ পদ্ধতি (১ ঘণ্টা); কেন্দ্র: ঢাকা' },
+        { id: 'c', code: 'C', name: 'C Unit (ব্যবসায় শিক্ষা)', sub: 'বিজনেস স্টাডিজ অনুষদ', date: '2027-01-22T10:00:00', fee: '৳১,২০০', time: 'সকাল ১০:০০টা - ১১:০০টা', method: 'MCQ পদ্ধতি (১ ঘণ্টা); কেন্দ্র: ঢাকা' },
+        { id: 'd', code: 'D', name: 'D Unit (সামাজিক বিজ্ঞান)', sub: 'সামাজিক বিজ্ঞান অনুষদ', date: '2027-01-23T10:00:00', fee: '৳১,২০০', time: 'সকাল ১০:০০টা - ১১:০০টা', method: 'MCQ পদ্ধতি (১ ঘণ্টা); কেন্দ্র: ঢাকা' }
       ]
     },
     KUET: {
       name: "খুলনা প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় (KUET)",
+      searchTerms: "খুলনা প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় কুয়েট খুলনা ইঞ্জিনিয়ারিং Khulna University of Engineering and Technology KUET",
       logo: "assets/logo/kuet.png",
       campusBg: "assets/background/kuet.webp",
       theme: {
         dark:  { headerFrom: '#047857', headerTo: '#0f172a', accent: '#d97706', accentLight: '#f59e0b', glow: 'rgba(217,119,6,0.16)' },
         light: { headerFrom: '#059669', headerTo: '#047857', accent: '#b45309', accentLight: '#d97706', glow: 'rgba(180,83,9,0.1)' }
       },
-      examNote: 'খুলনা, ঢাকা ও রাজশাহী, এই তিন বিভাগীয় শহরে একই তারিখে MCQ পদ্ধতিতে পরীক্ষা হবে। আবেদন প্রক্রিয়া ও সময়সূচি পরবর্তী বিজ্ঞপ্তিতে জানানো হবে',
+      applyFrom: '2026-11-10T10:00:00',
+      applyTo: '2026-12-10T17:00:00',
+      applyWindowText: '১০ নভেম্বর ২০২৬ (সকাল ১০:০০টা) থেকে ১০ ডিসেম্বর ২০২৬ (বিকেল ৫:০০টা)',
+      applyUrl: 'https://admission.kuet.ac.bd/',
+      sourceUrl: 'https://admission.kuet.ac.bd/uploads/notices/1.UG-Admission-2026-Circular.pdf',
+      examNote: 'খুলনা, ঢাকা ও রাজশাহী এই তিন বিভাগীয় শহরে একই তারিখে পরীক্ষা হবে। যোগ্য প্রার্থীদের তালিকা প্রকাশ ২০ ডিসেম্বর ২০২৬। মোট ১৭টি বিভাগে ১,১০৫টি আসন।',
       units: [
-        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা', sub: '২০২৬-২৭ শিক্ষাবর্ষ', date: '2027-01-08T10:00:00' }
+        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা (B.Sc. Engg, BURP ও B.Arch)', sub: 'সিভিল, ইইই ও মেকানিক্যাল অনুষদভুক্ত ১৭টি বিভাগ', date: '2027-01-08T09:30:00', fee: '৳১,৫০০ (খুলনা) / ৳১,৮০০ (ঢাকা ও রাজশাহী)', time: 'সকাল ৯:৩০টা - দুপুর ১২:৩০টা (B.Arch অঙ্কন: ১২:৪৫ - ১:৪৫)', method: '৩ ঘণ্টায় ১০০টি MCQ (মোট ৫০০ নম্বর: গণিত ১৫০, পদার্থ ১৫০, রসায়ন ১৫০, ইংরেজি ৫০) + B.Arch প্রার্থীদের ১ ঘণ্টার মুক্তহস্ত অঙ্কন (১০০ নম্বর)' }
+      ]
+    },
+    CU: {
+      name: "চট্টগ্রাম বিশ্ববিদ্যালয় (CU)",
+      searchTerms: "চট্টগ্রাম বিশ্ববিদ্যালয় চট্টগ্রাম ইউনিভার্সিটি চিটাগং ইউনিভার্সিটি চবি Chittagong University University of Chittagong CU",
+      logo: "assets/logo/cu.png",
+      campusBg: "assets/background/cu.webp",
+      theme: {
+        dark:  { headerFrom: '#27272a', headerTo: '#0f172a', accent: '#94a3b8', accentLight: '#cbd5e1', glow: 'rgba(148,163,184,0.14)' },
+        light: { headerFrom: '#3f3f46', headerTo: '#27272a', accent: '#64748b', accentLight: '#94a3b8', glow: 'rgba(100,116,139,0.1)' }
+      },
+      applyFrom: '2026-12-10T11:00:00',
+      applyTo: '2027-01-10T23:59:00',
+      applyWindowText: '১০ ডিসেম্বর ২০২৬ থেকে ১০ জানুয়ারি ২০২৭ (ফি জমা ১২ জানুয়ারি পর্যন্ত)',
+      applyUrl: 'https://admission.cu.ac.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/1y77b9fdlp',
+      examNote: 'চট্টগ্রাম, ঢাকা ও রাজশাহীতে মূল ৪ ইউনিটের পরীক্ষা হবে। B1, B2 ও D1 উপ-ইউনিটের পরীক্ষা শুধুমাত্র চবি ক্যাম্পাসে অনুষ্ঠিত হবে। পোষ্য কোটা বাতিল করা হয়েছে।',
+      units: [
+        { id: 'c',  code: 'C',  name: 'C Unit (বাণিজ্য)', sub: 'ব্যবসায় প্রশাসন অনুষদ', date: '2027-01-29T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: '১০০ নম্বরের MCQ + জিপিএ ২০; কেন্দ্র: চট্টগ্রাম, ঢাকা ও রাজশাহী' },
+        { id: 'a',  code: 'A',  name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান, জীববিজ্ঞান, ইঞ্জিনিয়ারিং ও মেরিন সায়েন্সেস অনুষদ', date: '2027-01-30T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: '১০০ নম্বরের MCQ + জিপিএ ২০; কেন্দ্র: চট্টগ্রাম, ঢাকা ও রাজশাহী' },
+        { id: 'b1', code: 'B1', name: 'B1 উপ-ইউনিট (চারুকলা)', sub: 'নাট্যকলা, চারুকলা ও সংগীত বিভাগ', date: '2027-02-03T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'MCQ ও ব্যবহারিক পরীক্ষা; কেন্দ্র: শুধু চবি ক্যাম্পাস' },
+        { id: 'b2', code: 'B2', name: 'B2 উপ-ইউনিট (ভাষা)', sub: 'আরবি, ইসলামিক স্টাডিজ ও পালি বিভাগ', date: '2027-02-04T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: '১০০ নম্বরের MCQ; কেন্দ্র: শুধু চবি ক্যাম্পাস' },
+        { id: 'b',  code: 'B',  name: 'B Unit (কলা ও মানববিদ্যা)', sub: 'কলা ও মানববিদ্যা অনুষদভুক্ত ৯টি বিষয়', date: '2027-02-05T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: '১০০ নম্বরের MCQ + জিপিএ ২০; কেন্দ্র: চট্টগ্রাম, ঢাকা ও রাজশাহী' },
+        { id: 'd',  code: 'D',  name: 'D Unit (সমাজবিজ্ঞান ও আইন)', sub: 'সমাজবিজ্ঞান, আইন, শিক্ষা অনুষদ, ভূগোল ও মনোবিজ্ঞান', date: '2027-02-06T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: '১০০ নম্বরের MCQ + জিপিএ ২০; কেন্দ্র: চট্টগ্রাম, ঢাকা ও রাজশাহী' },
+        { id: 'd1', code: 'D1', name: 'D1 উপ-ইউনিট (খেলাধুলা)', sub: 'ফিজিক্যাল এডুকেশন অ্যান্ড স্পোর্টস সায়েন্স বিভাগ', date: '2027-02-08T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'MCQ ও ব্যবহারিক মাঠ পরীক্ষা; কেন্দ্র: শুধু চবি ক্যাম্পাস' }
+      ]
+    },
+    COU: {
+      name: "কুমিল্লা বিশ্ববিদ্যালয় (CoU)",
+      searchTerms: "কুমিল্লা বিশ্ববিদ্যালয় কুমিল্লা ইউনিভার্সিটি কুবি Comilla University Cumilla University CoU COU",
+      logo: "assets/logo/cou.png",
+      campusBg: "assets/background/cou.webp",
+      theme: {
+        dark:  { headerFrom: '#7c2d12', headerTo: '#0f172a', accent: '#f59e0b', accentLight: '#fbbf24', glow: 'rgba(245,158,11,0.16)' },
+        light: { headerFrom: '#9a3412', headerTo: '#7c2d12', accent: '#d97706', accentLight: '#f59e0b', glow: 'rgba(217,119,6,0.1)' }
+      },
+      applyFrom: '2026-12-10T00:00:00',
+      applyTo: '2026-12-31T23:59:00',
+      applyWindowText: '১০ ডিসেম্বর ২০২৬ থেকে ৩১ ডিসেম্বর ২০২৬ (রাত ১১:৫৯টা)',
+      applyUrl: 'https://www.cou.ac.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/gpl5kef7h0',
+      examNote: 'কুমিল্লা বিশ্ববিদ্যালয়ের নিজস্ব ব্যবস্থাপনায় কুমিল্লা, চট্টগ্রাম ও রাজশাহী কেন্দ্রে পরীক্ষা অনুষ্ঠিত হবে।',
+      units: [
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান ও প্রকৌশল)', sub: 'বিজ্ঞান ও প্রকৌশল অনুষদ', date: '2027-02-05T11:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১১:০০টা - ১২:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা); কেন্দ্র: কুমিল্লা, চট্টগ্রাম ও রাজশাহী' },
+        { id: 'b', code: 'B', name: 'B Unit (কলা, সামাজিক বিজ্ঞান ও আইন)', sub: 'কলা ও মানবিক, সামাজিক বিজ্ঞান এবং আইন অনুষদ', date: '2027-02-06T15:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'বিকেল ৩:০০টা - ৪:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা); কেন্দ্র: কুমিল্লা, চট্টগ্রাম ও রাজশাহী' },
+        { id: 'c', code: 'C', name: 'C Unit (ব্যবসায় শিক্ষা)', sub: 'বিজনেস স্টাডিজ অনুষদ', date: '2027-02-07T11:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১১:০০টা - ১২:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা); কেন্দ্র: কুমিল্লা, চট্টগ্রাম ও রাজশাহী' }
       ]
     },
     KU: {
       name: "খুলনা বিশ্ববিদ্যালয় (KU)",
+      searchTerms: "খুলনা বিশ্ববিদ্যালয় খুলনা ইউনিভার্সিটি খুবি Khulna University KU",
       logo: "assets/logo/ku.png",
       campusBg: "assets/background/ku.webp",
       theme: {
         dark:  { headerFrom: '#0c4a6e', headerTo: '#0f172a', accent: '#f97316', accentLight: '#fb923c', glow: 'rgba(249,115,22,0.16)' },
         light: { headerFrom: '#0369a1', headerTo: '#0c4a6e', accent: '#ea580c', accentLight: '#f97316', glow: 'rgba(234,88,12,0.1)' }
       },
-      examNote: 'পূর্ণাঙ্গ সময়সূচি ও ভর্তি নির্দেশনা পরবর্তী বিজ্ঞপ্তিতে জানানো হবে',
+      applyWindowText: ' পূর্ণাঙ্গ বিজ্ঞপ্তিতে জানানো হবে',
+      applyUrl: 'https://admission.ku.ac.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/hgpvg1h5jx',
+      examNote: '১৭ ও ১৮ ডিসেম্বরের পূর্বঘোষিত তারিখ পরিবর্তন করে ৪ ও ৫ ফেব্রুয়ারি ২০২৭ নির্ধারণ করা হয়েছে।',
       units: [
-        { id: 'c', code: 'C', name: 'C Unit (কলা ও মানববিদ্যা)', sub: 'আর্টস অ্যান্ড হিউম্যানিটিজ, সোশ্যাল সায়েন্সেস, ল, এডুকেশন ও ফাইন আর্টস স্কুল', date: '2026-12-17T10:00:00' },
-        { id: 'd', code: 'D', name: 'D Unit (ব্যবস্থাপনা ও ব্যবসায় প্রশাসন)', sub: 'স্কুল অব ম্যানেজমেন্ট অ্যান্ড বিজনেস অ্যাডমিনিস্ট্রেশন', date: '2026-12-17T10:00:00' },
-        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান ও প্রকৌশল)', sub: 'স্কুল অব সায়েন্স, ইঞ্জিনিয়ারিং অ্যান্ড টেকনোলজি', date: '2026-12-18T10:00:00' },
-        { id: 'b', code: 'B', name: 'B Unit (লাইফ সায়েন্সেস)', sub: 'স্কুল অব লাইফ সায়েন্সেস', date: '2026-12-18T10:00:00' }
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান, প্রকৌশল ও প্রযুক্তিবিদ্যা)', sub: 'স্কুল অব সায়েন্স, ইঞ্জিনিয়ারিং অ্যান্ড টেকনোলজি', date: '2027-02-04T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: 'MCQ ও লিখিত সমন্বিত পদ্ধতি' },
+        { id: 'b', code: 'B', name: 'B Unit (জীববিজ্ঞান স্কুল)', sub: 'স্কুল অব লাইফ সায়েন্সেস', date: '2027-02-04T14:30:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'দুপুর ২:৩০টা (সম্ভাব্য)', method: 'MCQ ও লিখিত সমন্বিত পদ্ধতি' },
+        { id: 'c', code: 'C', name: 'C Unit (কলা, সামাজিক বিজ্ঞান, আইন, শিক্ষা ও চারুকলা)', sub: 'আর্টস অ্যান্ড হিউম্যানিটিজ, সোশ্যাল সায়েন্সেস, ল, এডুকেশন ও ফাইন আর্টস স্কুল', date: '2027-02-05T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: 'MCQ ও লিখিত (চারুকলায় অঙ্কনসহ)' },
+        { id: 'd', code: 'D', name: 'D Unit (ব্যবস্থাপনা ও ব্যবসায় প্রশাসন)', sub: 'স্কুল অব ম্যানেজমেন্ট অ্যান্ড বিজনেস অ্যাডমিনিস্ট্রেশন', date: '2027-02-05T14:30:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'দুপুর ২:৩০টা (সম্ভাব্য)', method: 'MCQ ও লিখিত সমন্বিত পদ্ধতি' }
       ]
     },
-    BUP: {
-      name: "বাংলাদেশ ইউনিভার্সিটি অব প্রফেশনালস (BUP)",
-      logo: "assets/logo/bup.png",
-      campusBg: "assets/background/bup.webp",
-      theme: {
-        dark:  { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#dc2626', accentLight: '#ef4444', glow: 'rgba(220,38,38,0.16)' },
-        light: { headerFrom: '#166534', headerTo: '#14532d', accent: '#b91c1c', accentLight: '#dc2626', glow: 'rgba(185,28,28,0.1)' }
-      },
-      examNote: 'মিরপুর সেনানিবাস, ঢাকায় পরীক্ষা অনুষ্ঠিত হবে। FBS-এর পরীক্ষা দুটি তারিখে (১ ও ৯ জানুয়ারি) নেওয়া হবে',
-      units: [
-        { id: 'fbs',  code: 'FBS',  name: 'Faculty of Business Studies (FBS)',            sub: 'বিজনেস স্টাডিজ অনুষদ',              date: '2027-01-01T10:00:00' },
-        { id: 'fass', code: 'FASS', name: 'Faculty of Arts and Social Science (FASS)',    sub: 'আর্টস অ্যান্ড সোশ্যাল সায়েন্স অনুষদ', date: '2027-01-02T10:00:00' },
-        { id: 'fst',  code: 'FST',  name: 'Faculty of Science and Technology (FST)',      sub: 'সায়েন্স অ্যান্ড টেকনোলজি অনুষদ',      date: '2027-01-08T10:00:00' },
-        { id: 'fet',  code: 'FET',  name: 'Faculty of Engineering and Technology (FET)',  sub: 'ইঞ্জিনিয়ারিং অ্যান্ড টেকনোলজি অনুষদ',  date: '2027-01-08T10:00:00' },
-        { id: 'fms',  code: 'FMS',  name: 'Faculty of Medical Studies (FMS)',             sub: 'মেডিকেল স্টাডিজ অনুষদ',              date: '2027-01-08T10:00:00' },
-        { id: 'fsss', code: 'FSSS', name: 'Faculty of Security and Strategic Studies (FSSS)', sub: 'সিকিউরিটি অ্যান্ড স্ট্র্যাটেজিক স্টাডিজ অনুষদ', date: '2027-01-08T10:00:00' }
-      ]
-    },
-      BUET: {
+    BUET: {
       name: "বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয় (BUET)",
+      searchTerms: "বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয় বুয়েট ইঞ্জিনিয়ারিং Bangladesh University of Engineering and Technology BUET",
       logo: "assets/logo/buet.png",
       campusBg: "assets/background/buet.webp",
       theme: {
         dark:  { headerFrom: '#590d0d', headerTo: '#0f172a', accent: '#ef4444', accentLight: '#f87171', glow: 'rgba(239,68,68,0.16)' },
         light: { headerFrom: '#991b1b', headerTo: '#590d0d', accent: '#dc2626', accentLight: '#ef4444', glow: 'rgba(220,38,38,0.1)' }
       },
-      examNote: 'এ বছরও লিখিত পরীক্ষার মাধ্যমে শিক্ষার্থী বাছাই করা হবে। তবে আবেদন বা পরীক্ষার বিস্তারিত প্রক্রিয়া বিজ্ঞপ্তিতে এখনও জানানো হয়নি।',
+      applyFrom: '2026-11-21T10:00:00',
+      applyWindowText: 'আবেদন শুরু ২১ নভেম্বর ২০২৬ (চূড়ান্ত শেষ তারিখ বিজ্ঞপ্তিতে প্রকাশিত হবে)',
+      applyUrl: 'https://www.buet.ac.bd/web/#/ugAdmission/1',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/imijb1b76x',
+      examNote: 'এ বছর প্রাক-নির্বাচনী পরীক্ষা ছাড়াই এইচএসসি ফলের ভিত্তিতে বাছাইকৃত প্রায় ১০ হাজার প্রার্থীকে সরাসরি মূল লিখিত পরীক্ষায় অংশ নেওয়ার সুযোগ দেওয়ার সিদ্ধান্ত হয়েছে।',
       units: [
-        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা', sub: '২০২৬-২৭ শিক্ষাবর্ষ', date: '2027-01-16T10:00:00' }
+        { id: 'ug', code: 'UG', name: 'স্নাতক চূড়ান্ত ভর্তি পরীক্ষা (ক ও খ গ্রুপ)', sub: 'প্রকৌশল, পুরকৌশল, যন্ত্রকৌশল, তড়িৎকৌশল ও স্থাপত্য অনুষদ', date: '2027-01-16T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (স্থাপত্য অঙ্কন বিকেলে)', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: বুয়েট ক্যাম্পাস, ঢাকা' }
       ]
     },
-      ACAS: {
-      name: "কৃষি গুচ্ছ (ACAS)",
-      logo: "assets/logo/acas.png",
-      campusBg: "assets/background/acas.webp",
+    JU: {
+      name: "জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)",
+      searchTerms: "জাহাঙ্গীরনগর বিশ্ববিদ্যালয় জাহাঙ্গীরনগর ইউনিভার্সিটি জাবি Jahangirnagar University JU",
+      logo: "assets/logo/ju.png",
+      campusBg: "assets/background/ju.webp",
       theme: {
-        dark:  { headerFrom: '#064e3b', headerTo: '#0f172a', accent: '#10b981', accentLight: '#34d399', glow: 'rgba(16,185,129,0.16)' },
-        light: { headerFrom: '#047857', headerTo: '#064e3b', accent: '#059669', accentLight: '#10b981', glow: 'rgba(5,150,105,0.1)' }
+        dark:  { headerFrom: '#3b0764', headerTo: '#0f172a', accent: '#eab308', accentLight: '#fde047', glow: 'rgba(234,179,8,0.16)' },
+        light: { headerFrom: '#581c87', headerTo: '#3b0764', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
       },
-      examNote: 'এবারের ভর্তি কার্যক্রমের নেতৃত্ব দেবে রাজধানীর শেরেবাংলা কৃষি বিশ্ববিদ্যালয় (শেকৃবি)',
+      applyWindowText: 'ভর্তি বিজ্ঞপ্তিতে প্রকাশ করা হবে',
+      applyUrl: 'https://ju-admission.org/',
+      sourceUrl: 'https://thedailycampus.com/admission-updates/281439',
+      examNote: '১০ জানুয়ারি থেকে ২১ জানুয়ারি ২০২৭ পর্যন্ত (শুক্র ও শনিবার ব্যতীত) শিফটভিত্তিক জাবি ক্যাম্পাসে ভর্তি পরীক্ষা অনুষ্ঠিত হবে।',
       units: [
-        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা', sub: '২০২৬-২৭ শিক্ষাবর্ষ', date: '2027-01-02T10:00:00' }
+        { id: 'all', code: 'ALL', name: 'সকল ইউনিট (A, B, C, C1, D, E ও IBA-JU)', sub: 'গাণিতিক ও পদার্থ, সমাজবিজ্ঞান, কলা ও মানবিকী, জীববিজ্ঞান ও বিজনেস স্টাডিজ অনুষদ', date: '2027-01-10T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: '১০ জানুয়ারি থেকে ২১ জানুয়ারি ২০২৭ (শিফটভিত্তিক)', method: '৮০ নম্বরের MCQ (৫৫ মিনিট) + জিপিএ ২০ নম্বর; কেন্দ্র: জাবি ক্যাম্পাস, সাভার' }
+      ]
+    },
+    SUST: {
+      name: "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (SUST)",
+      searchTerms: "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় শাবিপ্রবি সাস্ট সিলেট ইউনিভার্সিটি Shahjalal University of Science and Technology SUST",
+      logo: "assets/logo/sust.png",
+      campusBg: "assets/background/sust.webp",
+      theme: {
+        dark:  { headerFrom: '#115e59', headerTo: '#0f172a', accent: '#f59e0b', accentLight: '#fbbf24', glow: 'rgba(245,158,11,0.16)' },
+        light: { headerFrom: '#0f766e', headerTo: '#115e59', accent: '#d97706', accentLight: '#f59e0b', glow: 'rgba(217,119,6,0.1)' }
+      },
+      applyWindowText: 'ভর্তি বিজ্ঞপ্তিতে প্রকাশ করা হবে',
+      applyUrl: 'https://admission.sust.edu.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/nonjv8wels',
+      examNote: 'পূর্বে ১৩ ও ১৪ ফেব্রুয়ারি সম্ভাব্য তারিখ থাকলেও পরবর্তীতে তা এগিয়ে ১৭ ও ১৮ জানুয়ারি ২০২৭ নির্ধারণ করা হয়েছে।',
+      units: [
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান ও প্রকৌশল অনুষদভুক্ত বিভাগসমূহ', date: '2027-01-17T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: 'MCQ পদ্ধতি' },
+        { id: 'b', code: 'B', name: 'B Unit (বিজ্ঞান, মানবিক ও বাণিজ্য)', sub: 'সামাজিক বিজ্ঞান, ব্যবসায় প্রশাসন ও মানবিক বিভাগসমূহ', date: '2027-01-18T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: 'MCQ পদ্ধতি' }
+      ]
+    },
+    BUP: {
+      name: "বাংলাদেশ ইউনিভার্সিটি অব প্রফেশনালস (BUP)",
+      searchTerms: "বাংলাদেশ ইউনিভার্সিটি অব প্রফেশনালস বিইউপি আর্মড ফোর্সেস Bangladesh University of Professionals BUP",
+      logo: "assets/logo/bup.png",
+      campusBg: "assets/background/bup.webp",
+      theme: {
+        dark:  { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#dc2626', accentLight: '#ef4444', glow: 'rgba(220,38,38,0.16)' },
+        light: { headerFrom: '#166534', headerTo: '#14532d', accent: '#b91c1c', accentLight: '#dc2626', glow: 'rgba(185,28,28,0.1)' }
+      },
+      applyWindowText: 'বিজ্ঞপ্তিতে প্রকাশিত হবে',
+      applyUrl: 'https://admission.bup.edu.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/xdvakcx8op',
+      examNote: 'মিরপুর সেনানিবাস, ঢাকায় লিখিত পদ্ধতিতে পরীক্ষা অনুষ্ঠিত হবে। FBS-এর পরীক্ষা দুটি তারিখে (১ ও ৯ জানুয়ারি) নেওয়া হবে।',
+      units: [
+        { id: 'fbs',  code: 'FBS',  name: 'Faculty of Business Studies (FBS - ১ম ধাপ)', sub: 'বিজনেস স্টাডিজ অনুষদ', date: '2027-01-01T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'fass', code: 'FASS', name: 'Faculty of Arts and Social Science (FASS)', sub: 'আর্টস অ্যান্ড সোশ্যাল সায়েন্স অনুষদ', date: '2027-01-02T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'fst',  code: 'FST',  name: 'Faculty of Science and Technology (FST)', sub: 'সায়েন্স অ্যান্ড টেকনোলজি অনুষদ', date: '2027-01-08T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'fet',  code: 'FET',  name: 'Faculty of Engineering and Technology (FET)', sub: 'ইঞ্জিনিয়ারিং অ্যান্ড টেকনোলজি অনুষদ', date: '2027-01-08T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'fms',  code: 'FMS',  name: 'Faculty of Medical Studies (FMS)', sub: 'মেডিকেল স্টাডিজ অনুষদ', date: '2027-01-08T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'fsss', code: 'FSSS', name: 'Faculty of Security and Strategic Studies (FSSS)', sub: 'সিকিউরিটি অ্যান্ড স্ট্র্যাটেজিক স্টাডিজ অনুষদ', date: '2027-01-08T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'fbs2', code: 'FBS2', name: 'Faculty of Business Studies (FBS - ২য় ধাপ)', sub: 'বিজনেস স্টাডিজ অনুষদ (অতিরিক্ত স্লট)', date: '2027-01-09T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' }
+      ]
+    },
+    MIST: {
+      name: "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি (MIST)",
+      searchTerms: "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি এমআইএসটি মিরপুর Military Institute of Science and Technology MIST",
+      logo: "assets/logo/mist.png",
+      campusBg: "assets/background/mist.webp",
+      theme: {
+        dark:  { headerFrom: '#14532d', headerTo: '#0f172a', accent: '#eab308', accentLight: '#fde047', glow: 'rgba(234,179,8,0.16)' },
+        light: { headerFrom: '#15803d', headerTo: '#14532d', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
+      },
+      applyFrom: '2027-01-05T10:00:00',
+      applyTo: '2027-01-21T23:59:00',
+      applyWindowText: '৫ জানুয়ারি ২০২৭ থেকে ২১ জানুয়ারি ২০২৭',
+      applyUrl: 'https://admission.mist.ac.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/nonjv8wels',
+      examNote: '১৮ ও ১৯ ডিসেম্বরের পূর্বঘোষিত তারিখ পরিবর্তন করে ৫ ও ৬ ফেব্রুয়ারি ২০২৭ নির্ধারণ করা হয়েছে।',
+      units: [
+        { id: 'c',  code: 'C',  name: 'Unit C (বিজ্ঞান অনুষদ)', sub: 'বিজ্ঞান অনুষদভুক্ত প্রোগ্রামসমূহ', date: '2027-02-05T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০)', time: 'সকাল ১০:০০টা - দুপুর ১:০০টা', method: 'লিখিত পরীক্ষা (Written Exam); কেন্দ্র: ঢাকা' },
+        { id: 'ab', code: 'AB', name: 'Unit A+B (ইঞ্জিনিয়ারিং ও আর্কিটেকচার)', sub: 'ইঞ্জিনিয়ারিং ও আর্কিটেকচার অনুষদ', date: '2027-02-06T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,০০০ - ৳১,২০০)', time: 'সকাল ১০:০০টা - দুপুর ১:০০টা (আর্কিটেকচার অঙ্কন বিকেলে)', method: 'লিখিত ও অঙ্কন পরীক্ষা; কেন্দ্র: ঢাকা' }
+      ]
+    },
+    AAUB: {
+      name: "অ্যাভিয়েশন অ্যান্ড অ্যারোস্পেস বিশ্ববিদ্যালয় (AAUB)",
+      searchTerms: "অ্যাভিয়েশন অ্যান্ড অ্যারোস্পেস বিশ্ববিদ্যালয় এভিয়েশন ইউনিভার্সিটি এইউবি লালমনিরহাট Aviation and Aerospace University Bangladesh AAUB BSMRAAU",
+      logo: "assets/logo/aaub.png",
+      campusBg: "assets/background/aaub.webp",
+      theme: {
+        dark:  { headerFrom: '#0369a1', headerTo: '#0f172a', accent: '#38bdf8', accentLight: '#7dd3fc', glow: 'rgba(56,189,248,0.16)' },
+        light: { headerFrom: '#0284c7', headerTo: '#0369a1', accent: '#0284c7', accentLight: '#38bdf8', glow: 'rgba(2,132,199,0.1)' }
+      },
+      applyWindowText: 'ভর্তি বিজ্ঞপ্তিতে প্রকাশ করা হবে',
+      applyUrl: 'https://aaub.edu.bd/content/admission-info',
+      sourceUrl: 'https://www.bhorerkagoj.net/admission/803385',
+      examNote: '২৬ ডিসেম্বরের পরিবর্তে ৩০ জানুয়ারি ২০২৭ তারিখে বিএএফ শাহীন কলেজ ঢাকা ও লালমনিরহাট ক্যাম্পাসে পরীক্ষা অনুষ্ঠিত হবে।',
+      units: [
+        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা (B.Sc. in Aviation & Aerospace)', sub: 'অ্যারোস্পেস, অ্যাভিয়নিক্স ও এয়ারক্রাফট মেইনটেন্যান্স ইঞ্জিনিয়ারিং', date: '2027-01-30T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত/MCQ পরীক্ষা; কেন্দ্র: ঢাকা ও লালমনিরহাট' }
       ]
     },
     BUTEX: {
       name: "বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয় (BUTEX)",
+      searchTerms: "বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয় বুটেক্স টেক্সটাইল ইউনিভার্সিটি Bangladesh University of Textiles BUTEX",
       logo: "assets/logo/butex.png",
       campusBg: "assets/background/butex.webp",
       theme: {
         dark:  { headerFrom: '#6a0a0a', headerTo: '#0f172a', accent: '#ef4444', accentLight: '#f87171', glow: 'rgba(239,68,68,0.16)' },
         light: { headerFrom: '#991b1b', headerTo: '#6a0a0a', accent: '#dc2626', accentLight: '#ef4444', glow: 'rgba(220,38,38,0.1)' }
       },
-      examNote: '২০২৬-২৭ শিক্ষাবর্ষের ভর্তি পরীক্ষা আগামী ২৯ জানুয়ারি, ২০২৭ তারিখে (শুক্রবার) অনুষ্ঠিত হবে',
+      applyWindowText: 'ভর্তি বিজ্ঞপ্তিতে প্রকাশ করা হবে',
+      applyUrl: 'https://www.butex.edu.bd/admissions/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/xdvakcx8op',
+      examNote: '১১টি বিভাগে মোট ৬৩০টি আসনে বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং প্রোগ্রামে লিখিত ভর্তি পরীক্ষা অনুষ্ঠিত হবে।',
       units: [
-        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা', sub: '২০২৬-২৭ শিক্ষাবর্ষ', date: '2027-01-29T10:00:00' }
+        { id: 'ug', code: 'UG', name: 'বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং ভর্তি পরীক্ষা', sub: '১১টি বিভাগ (৬৩০ আসন)', date: '2027-01-29T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: 'লিখিত পরীক্ষা (Written Exam: গণিত, পদার্থ, রসায়ন ও ইংরেজি); কেন্দ্র: ঢাকা' }
       ]
     },
-      CUET: {
+    HSTU: {
+      name: "হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)",
+      searchTerms: "হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় হাবিপ্রবি দিনাজপুর ইউনিভার্সিটি Hajee Mohammad Danesh Science and Technology University HSTU",
+      logo: "assets/logo/hstu.png",
+      campusBg: "assets/background/hstu.webp",
+      theme: {
+        dark:  { headerFrom: '#0e7490', headerTo: '#0f172a', accent: '#22c55e', accentLight: '#4ade80', glow: 'rgba(34,197,94,0.16)' },
+        light: { headerFrom: '#0891b2', headerTo: '#0e7490', accent: '#16a34a', accentLight: '#22c55e', glow: 'rgba(22,163,74,0.1)' }
+      },
+      applyWindowText: 'ভর্তি বিজ্ঞপ্তিতে প্রকাশ করা হবে',
+      applyUrl: 'https://hstu.ac.bd/admission/index',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/xdvakcx8op',
+      examNote: '২৪ জানুয়ারি থেকে ২৮ জানুয়ারি ২০২৭ পর্যন্ত নিজস্ব ব্যবস্থাপনায় দিনাজপুর ক্যাম্পাসে ভর্তি পরীক্ষা অনুষ্ঠিত হবে।',
+      units: [
+        { id: 'all', code: 'ALL', name: 'স্নাতক ভর্তি পরীক্ষা (A, B, C ও D ইউনিট)', sub: 'কৃষি, প্রকৌশল, বিজ্ঞান, ব্যবসায় শিক্ষা ও মানবিক অনুষদ', date: '2027-01-24T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: '২৪ থেকে ২৮ জানুয়ারি ২০২৭ (শিফটভিত্তিক)', method: 'MCQ পদ্ধতি (আর্কিটেকচারে অঙ্কনসহ); কেন্দ্র: হাবিপ্রবি ক্যাম্পাস, দিনাজপুর' }
+      ]
+    },
+    BMU: {
+      name: "বাংলাদেশ মেরিটাইম বিশ্ববিদ্যালয় (BMU)",
+      searchTerms: "বাংলাদেশ মেরিটাইম বিশ্ববিদ্যালয় মেরিটাইম ইউনিভার্সিটি বিএমইউ Bangladesh Maritime University BMU BSMRMU",
+      logo: "assets/logo/bmu.png",
+      campusBg: "assets/background/bmu.webp",
+      theme: {
+        dark:  { headerFrom: '#1e3a5f', headerTo: '#091526', accent: '#06b6d4', accentLight: '#22d3ee', glow: 'rgba(6,182,212,0.16)' },
+        light: { headerFrom: '#0284c7', headerTo: '#1e3a5f', accent: '#0891b2', accentLight: '#06b6d4', glow: 'rgba(8,145,178,0.1)' }
+      },
+      applyWindowText: 'ভর্তি বিজ্ঞপ্তিতে প্রকাশ করা হবে',
+      applyUrl: 'https://bmu.edu.bd/',
+      sourceUrl: 'https://www.prothomalo.com/education/admission/xdvakcx8op',
+      examNote: '২৯ ও ৩০ ডিসেম্বর ২০২৬ তারিখে চারটি অনুষদের ভর্তি পরীক্ষা অনুষ্ঠিত হবে।',
+      units: [
+        { id: 'd1', code: 'FMGP', name: 'FMGP ও FSA অনুষদ (১ম দিন)', sub: 'মেরিটাইম গভর্ন্যান্স ও শিপিং অ্যাডমিনিস্ট্রেশন অনুষদ', date: '2026-12-29T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (৯০ মিনিট)' },
+        { id: 'd2', code: 'FEOS', name: 'FEOS ও FET অনুষদ (২য় দিন)', sub: 'আর্থ অ্যান্ড ওশান সায়েন্স ও ইঞ্জিনিয়ারিং অনুষদ', date: '2026-12-30T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (৯০ মিনিট)' }
+      ]
+    },
+    GST: {
+      name: "জিএসটি গুচ্ছ ভর্তি পরীক্ষা (GST)",
+      searchTerms: "জিএসটি গুচ্ছ গুচ্ছ ভর্তি পরীক্ষা সাধারণ ও প্রযুক্তি গুচ্ছ GST Cluster Admission IU MBSTU PSTU NSTU JKKNIU JUST PUST BRUR",
+      logo: "assets/logo/gst.png",
+      campusBg: "assets/background/gst.webp",
+      theme: {
+        dark:  { headerFrom: '#312e81', headerTo: '#0f172a', accent: '#818cf8', accentLight: '#a5b4fc', glow: 'rgba(129,140,248,0.16)' },
+        light: { headerFrom: '#4338ca', headerTo: '#312e81', accent: '#4f46e5', accentLight: '#6366f1', glow: 'rgba(79,70,229,0.1)' }
+      },
+      applyWindowText: 'সমন্বিত গুচ্ছ বিজ্ঞপ্তিতে প্রকাশিত হবে',
+      applyUrl: 'https://gstadmission.ac.bd/',
+      sourceUrl: 'https://thedailycampus.com/admission-updates/281946',
+      examNote: '১৯, ২০ ও ২৭ মার্চ ২০২৭ তারিখে সাধারণ এবং বিজ্ঞান ও প্রযুক্তি (GST) গুচ্ছভুক্ত বিশ্ববিদ্যালয়গুলোর ভর্তি পরীক্ষা অনুষ্ঠিত হবে।',
+      units: [
+        { id: 'b', code: 'B', name: 'B Unit (মানবিক)', sub: 'কলা, সামাজিক বিজ্ঞান ও আইন অনুষদ', date: '2027-03-19T11:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,৫০০)', time: 'বেলা ১১:০০টা - ১২:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা); কেন্দ্র: গুচ্ছভুক্ত বিশ্ববিদ্যালয় ক্যাম্পাস' },
+        { id: 'c', code: 'C', name: 'C Unit (ব্যবসায় শিক্ষা)', sub: 'বিজনেস স্টাডিজ অনুষদ', date: '2027-03-20T11:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,৫০০)', time: 'বেলা ১১:০০টা - ১২:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা); কেন্দ্র: গুচ্ছভুক্ত বিশ্ববিদ্যালয় ক্যাম্পাস' },
+        { id: 'd', code: 'D', name: 'D Unit (স্থাপত্য / চারুকলা)', sub: 'বিশেষায়িত অঙ্কন পরীক্ষা', date: '2027-03-20T15:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'বিকেল ৩:০০টা - ৪:০০টা', method: 'ব্যবহারিক / অঙ্কন পরীক্ষা' },
+        { id: 'a', code: 'A', name: 'A Unit (বিজ্ঞান)', sub: 'বিজ্ঞান, জীববিজ্ঞান ও প্রকৌশল অনুষদ', date: '2027-03-27T11:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,৫০০)', time: 'বেলা ১১:০০টা - ১২:০০টা', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা); কেন্দ্র: গুচ্ছভুক্ত বিশ্ববিদ্যালয় ক্যাম্পাস' }
+      ]
+    },
+    ACAS: {
+      name: "কৃষি গুচ্ছ (ACAS)",
+      searchTerms: "কৃষি গুচ্ছ কৃষি বিশ্ববিদ্যালয় শেরেবাংলা কৃষি বাকৃবি শেকৃবি Agriculture Cluster ACAS BAU SAU GAU CVASU",
+      logo: "assets/logo/acas.png",
+      campusBg: "assets/background/acas.webp",
+      theme: {
+        dark:  { headerFrom: '#064e3b', headerTo: '#0f172a', accent: '#10b981', accentLight: '#34d399', glow: 'rgba(16,185,129,0.16)' },
+        light: { headerFrom: '#047857', headerTo: '#064e3b', accent: '#059669', accentLight: '#10b981', glow: 'rgba(5,150,105,0.1)' }
+      },
+      applyWindowText: 'উপাচার্য কমিটির সভার পর প্রকাশিত হবে',
+      applyUrl: 'https://acas.edu.bd/',
+      sourceUrl: 'https://www.dainikshiksha.com/bn/news/admission-test-for-the-agriculture-cluster-might-be-delayed-390312',
+      examNote: 'এবারের কৃষি গুচ্ছ ভর্তি কার্যক্রমের নেতৃত্ব দেবে শেরেবাংলা কৃষি বিশ্ববিদ্যালয় (শেকৃবি)। ২ জানুয়ারি ২০২৭ সম্ভাব্য তারিখ হলেও তা পুনর্বিবেচনাধীন রয়েছে।',
+      units: [
+        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা (৯টি কৃষি বিশ্ববিদ্যালয়)', sub: 'কৃষি, ভেটেরিনারি, ফিশারিজ ও অ্যানিম্যাল হাজবেন্ড্রি', date: '2027-01-02T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে (গতবার ৳১,২০০)', time: 'সকাল ১০:০০টা - ১১:০০টা (সম্ভাব্য)', method: '১০০ নম্বরের MCQ পরীক্ষা (১ ঘণ্টা) + জিপিএ ৫০ নম্বর' }
+      ]
+    },
+    RUET: {
+      name: "রাজশাহী প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় (RUET)",
+      searchTerms: "রাজশাহী প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় রুয়েট রাজশাহী ইঞ্জিনিয়ারিং Rajshahi University of Engineering and Technology RUET",
+      logo: "assets/logo/ruet.png",
+      campusBg: "assets/background/ruet.webp",
+      theme: {
+        dark:  { headerFrom: '#1e3a8a', headerTo: '#064e3b', accent: '#eab308', accentLight: '#fde047', glow: 'rgba(234,179,8,0.16)' },
+        light: { headerFrom: '#1d4ed8', headerTo: '#047857', accent: '#ca8a04', accentLight: '#eab308', glow: 'rgba(202,138,4,0.1)' }
+      },
+      applyWindowText: 'চূড়ান্ত সার্কুলার অপেক্ষমাণ',
+      applyUrl: 'https://admission.ruet.ac.bd/',
+      sourceUrl: 'https://www.shikkhaweb.com/admission/bd/ruet/2026-27',
+      examNote: 'এ বছর এক ধাপে সম্পূর্ণ MCQ পদ্ধতিতে রুয়েট (রাজশাহী) ও বুয়েট (ঢাকা) কেন্দ্রে পরীক্ষা আয়োজনের সিদ্ধান্ত হয়েছে।',
+      units: [
+        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা (ক ও খ গ্রুপ - সম্ভাব্য)', sub: 'ইঞ্জিনিয়ারিং, ইউআরপি ও স্থাপত্য', date: '2027-01-14T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: 'এক ধাপে MCQ পরীক্ষা (স্থাপত্যে অঙ্কনসহ); কেন্দ্র: রাজশাহী ও ঢাকা' }
+      ]
+    },
+    CUET: {
       name: "চট্টগ্রাম প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় (CUET)",
+      searchTerms: "চট্টগ্রাম প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয় চুয়েট চট্টগ্রাম ইঞ্জিনিয়ারিং Chittagong University of Engineering and Technology CUET",
       logo: "assets/logo/cuet.png",
       campusBg: "assets/background/cuet.webp",
       theme: {
         dark:  { headerFrom: '#1e3a8a', headerTo: '#0f172a', accent: '#d97706', accentLight: '#f59e0b', glow: 'rgba(217,119,6,0.16)' },
         light: { headerFrom: '#1d4ed8', headerTo: '#1e3a8a', accent: '#b45309', accentLight: '#d97706', glow: 'rgba(180,83,9,0.1)' }
       },
+      applyWindowText: 'চূড়ান্ত সার্কুলার অপেক্ষমাণ',
+      applyUrl: 'https://cuet.ac.bd/admission',
+      sourceUrl: 'https://www.shikkhaweb.com/admission/bd/ckruet/2026-27',
       examNote: 'মোট ৯২০টি সাধারণ এবং ১১টি সংরক্ষিত আসনের বিপরীতে ক (ইঞ্জিনিয়ারিং ও বিইউআরপি) এবং খ (স্থাপত্য) গ্রুপের ভর্তি পরীক্ষা অনুষ্ঠিত হবে।',
       units: [
-        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা', sub: '২০২৬-২৭ শিক্ষাবর্ষ', date: '2027-01-25T10:00:00' }
+        { id: 'ug', code: 'UG', name: 'স্নাতক ভর্তি পরীক্ষা (সম্ভাব্য)', sub: '২০২৬-২৭ শিক্ষাবর্ষ (৯৩১ আসন)', date: '2027-01-23T10:00:00', fee: 'সার্কুলারে ঘোষিত হবে', time: 'সকাল ১০:০০টা (সম্ভাব্য)', method: 'লিখিত/MCQ ও অঙ্কন (সার্কুলারে চূড়ান্ত হবে)' }
+      ]
+    },
+    MED: {
+      name: "মেডিকেল ও ডেন্টাল (MBBS & BDS)",
+      searchTerms: "মেডিকেল ভর্তি পরীক্ষা ডেন্টাল ভর্তি পরীক্ষা এমবিবিএস বিডিএস ঢাকা মেডিকেল Medical Admission Dental Admission MBBS BDS DGME DMC",
+      logo: "assets/logo/med.png",
+      campusBg: "assets/background/med.webp",
+      theme: {
+        dark:  { headerFrom: '#0f4c5c', headerTo: '#0f172a', accent: '#14b8a6', accentLight: '#2dd4bf', glow: 'rgba(20,184,166,0.16)' },
+        light: { headerFrom: '#0f766e', headerTo: '#0f4c5c', accent: '#0d9488', accentLight: '#14b8a6', glow: 'rgba(13,148,136,0.1)' }
+      },
+      applyWindowText: 'স্বাস্থ্য শিক্ষা অধিদপ্তরের বিজ্ঞপ্তিতে প্রকাশিত হবে',
+      applyUrl: 'https://dgme.gov.bd/',
+      sourceUrl: 'https://medivoicebd.com/article/36656',
+      examNote: 'সরকারি-বেসরকারি মেডিকেল (MBBS) ও ডেন্টাল (BDS) কলেজের সমন্বিত ভর্তি পরীক্ষা একই দিনে ১৮ ডিসেম্বর ২০২৬ অনুষ্ঠিত হবে।',
+      units: [
+        { id: 'mbbs', code: 'MBBS', name: 'এমবিবিএস ও বিডিএস সমন্বিত ভর্তি পরীক্ষা', sub: 'সকল সরকারি ও বেসরকারি মেডিকেল এবং ডেন্টাল কলেজ', date: '2026-12-18T10:00:00', fee: '৳১,০০০ (সম্ভাব্য)', time: 'সকাল ১০:০০টা - ১১:১৫টা', method: '১০০ নম্বরের MCQ (১ ঘণ্টা ১৫ মিনিট: জীববিজ্ঞান ৩০, রসায়ন ২৫, পদার্থ ২০, ইংরেজি ১৫, সাধারণ জ্ঞান ১০; প্রতি ভুলে ০.২৫ কাটা)' }
       ]
     }
   };
 
-  const APP_VERSION = 'v5';
+  const APP_VERSION = 'v6';
   if (localStorage.getItem('vc_appVersion') !== APP_VERSION) {
     Object.keys(localStorage).forEach(k => { if (k.startsWith('vc_')) localStorage.removeItem(k); });
     localStorage.setItem('vc_appVersion', APP_VERSION);
@@ -815,7 +1561,9 @@
     const unit = uni.units.find(u => u.id === currentUnitId);
     const newUrl = '/' + currentUni + (unit ? '#' + unit.code : '');
     const currentFull = location.pathname + location.hash;
-    if (currentFull !== newUrl) history.replaceState(null, '', newUrl);
+    if (currentFull !== newUrl) {
+      try { history.replaceState(null, '', newUrl); } catch (e) {}
+    }
   }
 
   let currentUni = getUniFromPath();
@@ -859,15 +1607,110 @@
     return { months, days };
   }
 
+  /* Custom Searchable Dropdown Logic */
+  const dropdownBtn = document.getElementById('uniDropdownBtn');
+  const dropdownMenu = document.getElementById('uniDropdownMenu');
+  const searchInput = document.getElementById('uniSearchInput');
+  const searchClear = document.getElementById('uniSearchClear');
+  const optionsList = document.getElementById('uniOptionsList');
+  let dropdownOpen = false;
+
+  function renderDropdownOptions(query) {
+    const q = (query || '').trim().toLowerCase();
+    searchClear.classList.toggle('visible', q.length > 0);
+    const keys = Object.keys(UNIVERSITIES).filter(key => {
+      if (!q) return true;
+      const u = UNIVERSITIES[key];
+      const haystack = (key + ' ' + u.name + ' ' + (u.searchTerms || '')).toLowerCase();
+      return haystack.includes(q);
+    });
+
+    if (!keys.length) {
+      optionsList.innerHTML = `<div class="dropdown-empty">কোনো বিশ্ববিদ্যালয় পাওয়া যায়নি</div>`;
+      return;
+    }
+
+    optionsList.innerHTML = keys.map(key => {
+      const u = UNIVERSITIES[key];
+      const active = key === currentUni ? 'active' : '';
+      return `
+        <div class="dropdown-option ${active}" data-key="${key}">
+          <span>${u.name}</span>
+          <span class="dropdown-opt-code">${key}</span>
+        </div>`;
+    }).join('');
+
+    optionsList.querySelectorAll('.dropdown-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const picked = opt.getAttribute('data-key');
+        closeDropdown();
+        if (picked && picked !== currentUni) {
+          currentUni = picked;
+          currentUnitId = null;
+          refresh(true);
+        }
+      });
+    });
+  }
+
+  function openDropdown() {
+    dropdownOpen = true;
+    dropdownBtn.classList.add('open');
+    dropdownBtn.setAttribute('aria-expanded', 'true');
+    dropdownMenu.classList.add('open');
+    searchInput.value = '';
+    renderDropdownOptions('');
+    setTimeout(() => searchInput.focus(), 40);
+  }
+
+  function closeDropdown() {
+    dropdownOpen = false;
+    dropdownBtn.classList.remove('open');
+    dropdownBtn.setAttribute('aria-expanded', 'false');
+    dropdownMenu.classList.remove('open');
+  }
+
+  dropdownBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (dropdownOpen) closeDropdown();
+    else openDropdown();
+  });
+
+  searchInput.addEventListener('input', () => {
+    renderDropdownOptions(searchInput.value);
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDropdown();
+    } else if (e.key === 'Enter') {
+      const first = optionsList.querySelector('.dropdown-option');
+      if (first) first.click();
+    }
+  });
+
+  searchClear.addEventListener('click', (e) => {
+    e.stopPropagation();
+    searchInput.value = '';
+    renderDropdownOptions('');
+    searchInput.focus();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (dropdownOpen && !document.getElementById('customDropdownWrap').contains(e.target)) {
+      closeDropdown();
+    }
+  });
+
   function populateUniSelect() {
-    const sel = document.getElementById('uniSelect');
-    sel.innerHTML = Object.keys(UNIVERSITIES).map(key =>
-      `<option value="${key}" ${key === currentUni ? 'selected' : ''}>${UNIVERSITIES[key].name}</option>`
-    ).join('');
+    const uni = UNIVERSITIES[currentUni];
+    document.getElementById('uniTriggerText').textContent = uni.name;
+    renderDropdownOptions(searchInput.value);
 
     const logo = document.getElementById('uniLogo');
-    logo.src = UNIVERSITIES[currentUni].logo;
-    logo.alt = UNIVERSITIES[currentUni].name;
+    logo.style.display = 'none';
+    logo.src = uni.logo;
+    logo.alt = uni.name;
   }
 
   function applyTheme() {
@@ -919,28 +1762,180 @@
     }
   }
 
-  function renderAdmissionInfo() {
+  /* Separate Application Deadline Countdown Bar */
+  function renderDeadlineBar() {
     const uni = UNIVERSITIES[currentUni];
-    const wrap = document.getElementById('admissionInfo');
-    const lines = [];
-
-    if (uni.applyFrom && uni.applyTo) {
-      lines.push(`📝 ভর্তি আবেদন: <b>${fmtDate(uni.applyFrom)} - ${fmtDate(uni.applyTo)}, ${fmtYear(uni.applyTo)}</b>`);
-    }
-    if (uni.classStart) {
-      lines.push(`🎓 ক্লাস শুরু: <b>${fmtDate(uni.classStart)}, ${fmtYear(uni.classStart)}</b>`);
-    }
-    if (uni.examNote) {
-      lines.push(`ℹ️ ${uni.examNote}`);
+    const bar = document.getElementById('appDeadlineBar');
+    if (!uni.applyTo && !uni.applyFrom) {
+      bar.classList.remove('visible');
+      bar.innerHTML = '';
+      return;
     }
 
-    if (lines.length) {
-      wrap.innerHTML = lines.map(l => `<span>${l}</span>`).join('');
-      wrap.classList.add('has-content');
-    } else {
-      wrap.innerHTML = '';
-      wrap.classList.remove('has-content');
+    const now = new Date();
+    let label = '';
+    let timerText = '';
+    let dotClass = '';
+
+    if (uni.applyFrom && new Date(uni.applyFrom) > now) {
+      const st = getStatus(uni.applyFrom, now);
+      dotClass = 'upcoming';
+      label = 'আবেদন শুরু হতে বাকি:';
+      timerText = `${toBnNum(st.days)} দিন ${toBnNum(String(st.hours).padStart(2, '0'))}:${toBnNum(String(st.minutes).padStart(2, '0'))}:${toBnNum(String(st.seconds).padStart(2, '0'))}`;
+    } else if (uni.applyTo) {
+      const st = getStatus(uni.applyTo, now);
+      if (st.status === 'upcoming') {
+        dotClass = '';
+        label = 'আবেদনের শেষ সময়:';
+        timerText = `${toBnNum(st.days)} দিন ${toBnNum(String(st.hours).padStart(2, '0'))}:${toBnNum(String(st.minutes).padStart(2, '0'))}:${toBnNum(String(st.seconds).padStart(2, '0'))}`;
+      } else {
+        dotClass = 'closed';
+        label = 'আবেদনের সময় শেষ হয়েছে';
+        timerText = '';
+      }
     }
+
+    const applyLinkHtml = uni.applyUrl
+      ? `<a href="${uni.applyUrl}" target="_blank" rel="noopener noreferrer" class="deadline-apply-mini">আবেদন লিংক</a>`
+      : '';
+
+    bar.innerHTML = `
+      <div class="deadline-left">
+        <span class="deadline-dot ${dotClass}"></span>
+        <span>${label}</span>
+        ${timerText ? `<span class="deadline-timer-mono" id="headerDeadlineMono">${timerText}</span>` : ''}
+      </div>
+      ${applyLinkHtml}`;
+    bar.classList.add('visible');
+  }
+
+  /* Floating Info Modal (`i` icon click) */
+  let modalUnitId = null;
+  const modalBackdrop = document.getElementById('infoModalBackdrop');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+  function openInfoModal(unitId) {
+    const uni = UNIVERSITIES[currentUni];
+    modalUnitId = unitId || currentUnitId || uni.units[0].id;
+    renderInfoModalContent();
+    modalBackdrop.classList.add('open');
+  }
+
+  function closeInfoModal() {
+    modalBackdrop.classList.remove('open');
+  }
+
+  modalCloseBtn.addEventListener('click', closeInfoModal);
+  modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) closeInfoModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalBackdrop.classList.contains('open')) closeInfoModal();
+  });
+
+  document.getElementById('headerInfoBtn').addEventListener('click', () => {
+    openInfoModal(currentUnitId);
+  });
+
+  function getDeadlineLiveString(uni) {
+    const now = new Date();
+    if (uni.applyFrom && new Date(uni.applyFrom) > now) {
+      const s = getStatus(uni.applyFrom, now);
+      return { prefix: 'আবেদন শুরু হতে বাকি', text: `${toBnNum(s.days)} দিন ${toBnNum(s.hours)} ঘণ্টা ${toBnNum(s.minutes)} মিনিট ${toBnNum(s.seconds)} সেকেন্ড` };
+    }
+    if (uni.applyTo) {
+      const s = getStatus(uni.applyTo, now);
+      if (s.status === 'upcoming') {
+        return { prefix: 'আবেদন শেষ হতে বাকি', text: `${toBnNum(s.days)} দিন ${toBnNum(s.hours)} ঘণ্টা ${toBnNum(s.minutes)} মিনিট ${toBnNum(s.seconds)} সেকেন্ড` };
+      }
+      return { prefix: 'আবেদনের অবস্থা', text: 'আবেদনের সময় সমাপ্ত' };
+    }
+    return null;
+  }
+
+  function renderInfoModalContent() {
+    const uni = UNIVERSITIES[currentUni];
+    const unit = uni.units.find(u => u.id === modalUnitId) || uni.units[0];
+
+    document.getElementById('modalUniTitle').textContent = uni.name;
+    document.getElementById('modalUnitSub').textContent = unit.name + ' • ' + unit.sub;
+
+    const unitTabsHtml = uni.units.length > 1
+      ? `<div class="modal-unit-tabs">
+          ${uni.units.map(u => `<button type="button" class="modal-unit-tab ${u.id === unit.id ? 'active' : ''}" data-uid="${u.id}">${u.code}</button>`).join('')}
+        </div>`
+      : '';
+
+    const dlLive = getDeadlineLiveString(uni);
+    const dlLiveHtml = dlLive
+      ? `<div class="modal-deadline-live">
+          <span>⏳ ${dlLive.prefix}:</span>
+          <span class="modal-deadline-digits" id="modalDeadlineDigits">${dlLive.text}</span>
+        </div>`
+      : '';
+
+    const classStartHtml = uni.classStart
+      ? `<div class="modal-kv"><span class="modal-k">ক্লাস শুরু</span><div class="modal-v">${fmtDate(uni.classStart)}, ${fmtYear(uni.classStart)}</div></div>`
+      : '';
+
+    const body = document.getElementById('modalBodyContent');
+    body.innerHTML = `
+      <div class="modal-section-box">
+        <div class="modal-sec-label">📝 আবেদনের সময়সীমা ও লিংক</div>
+        <div class="modal-info-grid">
+          <div class="modal-kv full">
+            <span class="modal-k">আবেদন কবে থেকে কবে</span>
+            <div class="modal-v">${uni.applyWindowText || 'বিজ্ঞপ্তিতে জানানো হবে'}</div>
+          </div>
+          ${classStartHtml}
+        </div>
+        ${dlLiveHtml}
+        <div class="modal-links-row" style="margin-top:10px">
+          ${uni.applyUrl ? `<a href="${uni.applyUrl}" target="_blank" rel="noopener noreferrer" class="modal-action-link modal-action-primary">${SVG_EXT} অফিসিয়াল আবেদন লিংক</a>` : ''}
+          ${uni.sourceUrl ? `<a href="${uni.sourceUrl}" target="_blank" rel="noopener noreferrer" class="modal-action-link modal-action-secondary">${SVG_EXT} ভর্তি বিজ্ঞপ্তি / সূত্র</a>` : ''}
+        </div>
+      </div>
+
+      <div class="modal-section-box">
+        <div class="modal-sec-label">🎯 ইউনিটভিত্তিক ফি, তারিখ ও পরীক্ষার পদ্ধতি</div>
+        ${unitTabsHtml}
+        <div class="modal-info-grid">
+          <div class="modal-kv">
+            <span class="modal-k">ইউনিট</span>
+            <div class="modal-v">${unit.name}</div>
+          </div>
+          <div class="modal-kv">
+            <span class="modal-k">আবেদন ফি</span>
+            <div class="modal-v" style="color:var(--accent-blue-light)">${unit.fee || 'বিজ্ঞপ্তিতে প্রকাশিত হবে'}</div>
+          </div>
+          <div class="modal-kv">
+            <span class="modal-k">কবে পরীক্ষা</span>
+            <div class="modal-v">${fmtDate(unit.date)}, ${fmtYear(unit.date)} (${fmtDay(unit.date)})</div>
+          </div>
+          <div class="modal-kv">
+            <span class="modal-k">কখন পরীক্ষা (সময়)</span>
+            <div class="modal-v">${unit.time || 'সকাল ১০:০০টা'}</div>
+          </div>
+          <div class="modal-kv full">
+            <span class="modal-k">কীভাবে পরীক্ষা হবে (মানবণ্টন ও কেন্দ্র)</span>
+            <div class="modal-v">${unit.method || 'MCQ পদ্ধতি'}</div>
+          </div>
+        </div>
+      </div>
+
+      ${uni.examNote ? `
+      <div class="modal-section-box">
+        <div class="modal-sec-label">ℹ️ গুরুত্বপূর্ণ তথ্য</div>
+        <div class="modal-note-text">${uni.examNote}</div>
+      </div>` : ''}
+    `;
+
+    body.querySelectorAll('.modal-unit-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modalUnitId = btn.getAttribute('data-uid');
+        renderInfoModalContent();
+      });
+    });
   }
 
   function renderUnits() {
@@ -963,6 +1958,10 @@
         ? `<span class="selected-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`
         : '';
 
+      const feeBadge = (u.fee && u.fee.startsWith('৳'))
+        ? `<span class="fee-mini-tag">${u.fee.split(' ')[0]}</span>`
+        : '';
+
       return `
         <div class="unit-card ${selected ? 'selected' : ''} ${passed ? 'passed' : ''}" data-id="${u.id}">
           <div class="card-top">
@@ -970,9 +1969,18 @@
               <div class="unit-name">${u.name}</div>
               <div class="unit-sub">${u.sub}</div>
             </div>
-            <div class="badge-row">${checkIcon}${badge}</div>
+            <div class="badge-row">
+              ${checkIcon}
+              ${badge}
+              <button type="button" class="unit-info-btn" data-info-id="${u.id}" title="বিস্তারিত তথ্য ও আবেদন লিংক" aria-label="বিস্তারিত তথ্য">
+                ${SVG_INFO}
+              </button>
+            </div>
           </div>
-          <div class="date-pill">${SVG_CAL} ${fmtDate(u.date)}, ${fmtYear(u.date)} • ${fmtDay(u.date)}</div>
+          <div class="date-pill">
+            <span class="date-pill-left">${SVG_CAL} ${fmtDate(u.date)}, ${fmtYear(u.date)} • ${fmtDay(u.date)}</span>
+            ${feeBadge}
+          </div>
         </div>`;
     }).join('');
 
@@ -982,6 +1990,14 @@
         saveState();
         renderUnits();
         renderHero(true);
+      });
+    });
+
+    grid.querySelectorAll('.unit-info-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const uid = btn.getAttribute('data-info-id');
+        openInfoModal(uid);
       });
     });
   }
@@ -1032,7 +2048,9 @@
       : '';
 
     nec.innerHTML = `
-      <div class="exam-title">${unit.name}</div>
+      <div class="exam-title-row">
+        <div class="exam-title">${unit.name}</div>
+      </div>
       <div class="exam-date-line">${SVG_CAL13} ${fmtDate(unit.date)}, ${fmtYear(unit.date)} • ${fmtDay(unit.date)}</div>
       <div class="countdown-grid">${boxes}</div>
       <div class="bottom-row">
@@ -1061,6 +2079,8 @@
       unitName: unit.name,
       unitSub: unit.sub,
       examDateIso: unit.date,
+      applyFromIso: uni.applyFrom || '',
+      applyToIso: uni.applyTo || '',
       examNote: uni.examNote || '',
       theme: uni.theme[mode]
     };
@@ -1075,18 +2095,19 @@
       populateUniSelect();
       applyTheme();
       applyCampusBackground();
-      renderAdmissionInfo();
       renderUnits();
       saveState();
     }
+    renderDeadlineBar();
     renderHero(force !== false);
+    if (modalBackdrop.classList.contains('open')) {
+      const dlDigits = document.getElementById('modalDeadlineDigits');
+      if (dlDigits) {
+        const dl = getDeadlineLiveString(UNIVERSITIES[currentUni]);
+        if (dl) dlDigits.textContent = dl.text;
+      }
+    }
   }
-
-  document.getElementById('uniSelect').addEventListener('change', e => {
-    currentUni = e.target.value;
-    currentUnitId = null;
-    refresh(true);
-  });
 
   const darkToggle = document.getElementById('darkToggle');
   const savedTheme = localStorage.getItem('vc_theme') || 'dark';
@@ -1102,6 +2123,7 @@
     document.getElementById('theme-meta').setAttribute('content', t === 'dark' ? '#0f172a' : '#f0f4ff');
     document.getElementById('toggleLabel').textContent = t === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
     applyTheme();
+    notifyNativeWidget();
   });
 
   refresh(true);
