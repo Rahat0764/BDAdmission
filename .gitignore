@@ -1,0 +1,9 @@
+# Protect environment variables and bot tokens
+.env
+.env.*
+!.env.example
+
+# Dependencies and build outputs
+node_modules/
+.vercel/
+.DS_Store

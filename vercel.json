@@ -1,5 +1,14 @@
 {
+  "crons": [
+    {
+      "path": "/api/daily-stats",
+      "schedule": "0 18 * * *"
+    }
+  ],
   "rewrites": [
-    { "source": "/((?!assets/|api/).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!assets/|api/).*)",
+      "destination": "/index.html"
+    }
   ]
 }
